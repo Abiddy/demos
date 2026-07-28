@@ -1,3 +1,192 @@
+export const services = [
+  {
+    category: 'Residential',
+    title: 'Foundation repair',
+    body: 'Engineered and built in-house — the only LA foundation contractor licensed to design and construct your repair.',
+  },
+  {
+    category: 'Multi-Family',
+    title: 'Soft-story retrofit',
+    body: 'End-to-end earthquake retrofitting for multi-family buildings across Los Angeles mandatory ordinances.',
+  },
+  {
+    category: 'Commercial',
+    title: 'Structural retrofit',
+    body: 'URM, non-ductile concrete, and steel frame retrofits for commercial and industrial properties.',
+  },
+];
+
+export const foundationCards = [
+  {
+    eyebrow: 'Residential',
+    title: 'Foundation repair with engineer-led design/build',
+    body: 'The only Los Angeles foundation contractor licensed to design and construct your repair — inspections, engineering, permits, and construction under one roof.',
+    accent: 'Learn more',
+  },
+  {
+    eyebrow: 'Multi-Family',
+    title: 'Soft-story retrofitting for LA compliance',
+    body: 'End-to-end earthquake retrofitting for soft-story buildings — trusted specialists across Los Angeles mandatory ordinances.',
+    accent: 'Learn more',
+  },
+];
+
+export const pillars = [
+  {
+    title: 'Engineer-led design/build',
+    body: 'Licensed to engineer and construct structural repairs — one accountable team from inspection through construction.',
+  },
+  {
+    title: '30+ years of experience',
+    body: 'Over 15,000 properties inspected and 5,000+ structures repaired across four Southern California counties.',
+  },
+  {
+    title: 'Trusted nationwide',
+    body: 'Featured on HGTV, CNN, NBC News, and more — the most trusted structural specialist in Los Angeles.',
+  },
+];
+
+export const testimonials = [
+  {
+    quote:
+      'Alpha Structural handled our foundation repair from engineering through construction. One team, clear communication, and work done right the first time.',
+    name: 'Maria G.',
+    role: 'Homeowner, Los Angeles',
+  },
+  {
+    quote:
+      'Our soft-story retrofit was completed on schedule and passed city inspection without issues. Professional from start to finish.',
+    name: 'David R.',
+    role: 'Property Owner, Silver Lake',
+  },
+  {
+    quote:
+      'Having in-house engineering made all the difference. No subcontract chains, no surprises — just solid structural work.',
+    name: 'Jennifer L.',
+    role: 'HOA Board Member, Pasadena',
+  },
+  {
+    quote:
+      'They inspected, engineered, permitted, and built. That design/build capability is rare and it showed in the quality of our repair.',
+    name: 'Robert K.',
+    role: 'Commercial Property Manager',
+  },
+];
+
+export const featuredQuote = {
+  quote:
+    'Why patch when you can engineer and build it right the first time? Alpha Structural changed how we think about foundation repair.',
+  name: 'Sarah M.',
+  role: 'Homeowner, Glendale',
+};
+
+export const plans = [
+  {
+    name: 'Free Inspection',
+    price: 'Free',
+    priceNote: 'no obligation',
+    features: [
+      'On-site structural assessment',
+      'Written findings and recommendations',
+      'Clear scope and timeline estimate',
+    ],
+    cta: 'Schedule inspection',
+    highlighted: false,
+  },
+  {
+    name: 'Design / Build',
+    price: 'Custom',
+    priceNote: 'per project',
+    features: [
+      'PE-stamped engineering plans',
+      'Permit and plan check support',
+      'In-house construction crew',
+      'GreenSky financing available',
+    ],
+    cta: 'Request estimate',
+    highlighted: true,
+  },
+];
+
+export const tools = [
+  {
+    title: 'Foundation repair',
+    body: 'Engineered and built in-house — inspections, engineering, permits, and construction under one roof.',
+    wide: true,
+  },
+  {
+    title: 'Soft-story retrofit',
+    body: 'End-to-end earthquake retrofitting for multi-family buildings across LA mandatory ordinances.',
+  },
+  {
+    title: 'Commercial retrofit',
+    body: 'URM, non-ductile concrete, and steel frame retrofits for commercial and industrial properties.',
+  },
+  {
+    title: 'Engineering reports',
+    body: 'Licensed structural documentation for lenders, HOAs, and city compliance.',
+  },
+  {
+    title: 'Hillside stabilization',
+    body: 'Specialists in hillside properties with engineered solutions for slope movement and foundation failure.',
+  },
+  {
+    title: 'Permit & plan check',
+    body: 'PE-stamped plans and permit support from inspection through city approval.',
+  },
+];
+
+export const successStories = [
+  {
+    title: 'Hillside foundation repair',
+    location: 'Los Angeles, CA',
+    image:
+      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    title: 'Soft-story retrofit',
+    location: 'Silver Lake, CA',
+    image:
+      'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    title: 'Commercial structural retrofit',
+    location: 'Downtown LA',
+    image:
+      'https://images.unsplash.com/photo-1477959858617-67f85ebb993e?auto=format&fit=crop&w=800&q=80',
+  },
+];
+
+export const featureRows = [
+  {
+    title: 'Engineer-led design/build',
+    body: 'Alpha Structural is licensed to engineer and construct structural repairs — one team from inspection through construction, anywhere in Southern California.',
+    items: [
+      'PE-stamped plans and permit support',
+      'In-house engineering and construction',
+      'Residential, multi-family, and commercial',
+    ],
+  },
+  {
+    title: 'Foundation repair done right',
+    body: 'The only Los Angeles foundation contractor licensed to design and construct your repair — no subcontract chains or outsourced engineering.',
+    items: [
+      'Foundation repair and hillside stabilization',
+      'Soft-story and commercial retrofit',
+      'Free inspections across four counties',
+    ],
+  },
+  {
+    title: 'Trusted since 1993',
+    body: 'Over 15,000 properties inspected and 5,000+ structures repaired across Los Angeles, Orange, Ventura, and Santa Barbara counties.',
+    items: [
+      '30+ years serving Southern California',
+      'GreenSky financing available',
+      'Featured on HGTV, CNN, and NBC News',
+    ],
+  },
+];
+
 export const mediaFeatures = [
   { name: 'HGTV', logo: '/logos/hgtv.svg', width: 100, height: 32 },
   { name: 'CNN', logo: '/logos/cnn.svg', width: 80, height: 32 },
