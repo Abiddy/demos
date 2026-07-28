@@ -1,0 +1,642 @@
+@import url('https://db.onlinewebfonts.com/c/60323b40d418d578b0b2d55837f67ef2?family=Magical+Source+Demo');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&display=swap');
+
+.horizon-page {
+  font-family: 'Geist', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100dvh;
+  overflow: hidden;
+  background: #000;
+}
+
+.horizon-page .font-heading {
+  font-family: 'Magical Source Demo', serif;
+}
+
+/* NAVBAR */
+.horizon-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (min-width: 768px) {
+  .horizon-navbar {
+    padding: 20px 48px;
+  }
+}
+
+.horizon-nav-brand {
+  position: relative;
+  z-index: 50;
+  flex-shrink: 0;
+}
+
+.shane-homes-logo {
+  color: white;
+  line-height: 1;
+}
+
+.shane-homes-logo-name {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+@media (min-width: 768px) {
+  .shane-homes-logo-name {
+    font-size: 18px;
+  }
+}
+
+.shane-homes-logo-a {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  margin: 0 1px;
+  transform: translateY(-1px);
+}
+
+@media (min-width: 768px) {
+  .shane-homes-logo-a {
+    font-size: 11px;
+  }
+}
+
+.shane-homes-logo-rule {
+  width: 100%;
+  height: 1px;
+  margin: 4px 0 3px;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.shane-homes-logo-tag {
+  font-size: 7px;
+  font-weight: 500;
+  letter-spacing: 0.38em;
+}
+
+@media (min-width: 768px) {
+  .shane-homes-logo-tag {
+    font-size: 8px;
+  }
+}
+
+.horizon-nav-actions {
+  display: none;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  z-index: 50;
+}
+
+@media (min-width: 768px) {
+  .horizon-nav-actions {
+    display: flex;
+  }
+}
+
+.horizon-phone {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.horizon-phone:hover {
+  color: white;
+}
+
+.horizon-mobile-phone {
+  display: block;
+  margin-bottom: 16px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+.horizon-logo {
+  width: 28px;
+  height: 28px;
+  color: white;
+  position: relative;
+  z-index: 50;
+}
+
+@media (min-width: 768px) {
+  .horizon-logo {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.horizon-nav-links {
+  display: none;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+
+@media (min-width: 768px) {
+  .horizon-nav-links {
+    display: flex;
+  }
+}
+
+.horizon-nav-links a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0.025em;
+  transition: color 0.2s;
+}
+
+.horizon-nav-links a:hover {
+  color: white;
+}
+
+.horizon-cta-btn {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  border-radius: 9999px;
+  padding: 6px 6px 6px 20px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+  .horizon-cta-btn {
+    display: flex;
+  }
+}
+
+.horizon-cta-btn:hover {
+  background: white;
+}
+
+.horizon-cta-btn-text {
+  color: #1f2937;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-family: 'Geist', sans-serif;
+}
+
+@media (min-width: 768px) {
+  .horizon-cta-btn-text {
+    font-size: 14px;
+  }
+}
+
+.horizon-cta-btn-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  background: rgba(251, 207, 232, 0.6);
+  transition: background 0.2s;
+}
+
+@media (min-width: 768px) {
+  .horizon-cta-btn-arrow {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.horizon-cta-btn:hover .horizon-cta-btn-arrow {
+  background: rgba(252, 164, 175, 0.7);
+}
+
+.horizon-cta-btn-arrow svg {
+  width: 14px;
+  height: 14px;
+  color: #374151;
+}
+
+/* HAMBURGER */
+.horizon-hamburger {
+  position: relative;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .horizon-hamburger {
+    display: none;
+  }
+}
+
+.horizon-hamburger-line {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: white;
+  border-radius: 9999px;
+  transition: all 0.3s cubic-bezier(0.77, 0, 0.18, 1);
+}
+
+.horizon-hamburger-line:first-child {
+  transform: translateY(-3px);
+}
+
+.horizon-hamburger-line:last-child {
+  transform: translateY(3px);
+}
+
+.horizon-hamburger.open .horizon-hamburger-line:first-child {
+  transform: rotate(45deg) translateY(0.75px);
+}
+
+.horizon-hamburger.open .horizon-hamburger-line:last-child {
+  transform: rotate(-45deg) translateY(-0.75px);
+}
+
+/* MOBILE MENU */
+.horizon-mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  visibility: hidden;
+  transition: all 0.5s cubic-bezier(0.77, 0, 0.18, 1);
+}
+
+@media (min-width: 768px) {
+  .horizon-mobile-menu {
+    display: none !important;
+  }
+}
+
+.horizon-mobile-menu.open {
+  visibility: visible;
+}
+
+.horizon-mobile-menu-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(24px);
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.77, 0, 0.18, 1);
+}
+
+.horizon-mobile-menu.open .horizon-mobile-menu-bg {
+  opacity: 1;
+}
+
+.horizon-mobile-menu-content {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 32px;
+}
+
+.horizon-mobile-menu-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  list-style: none;
+}
+
+.horizon-mobile-menu-links li {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: all 0.5s cubic-bezier(0.77, 0, 0.18, 1);
+}
+
+.horizon-mobile-menu.open .horizon-mobile-menu-links li {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.horizon-mobile-menu.open .horizon-mobile-menu-links li:nth-child(1) {
+  transition-delay: 100ms;
+}
+.horizon-mobile-menu.open .horizon-mobile-menu-links li:nth-child(2) {
+  transition-delay: 160ms;
+}
+.horizon-mobile-menu.open .horizon-mobile-menu-links li:nth-child(3) {
+  transition-delay: 220ms;
+}
+.horizon-mobile-menu.open .horizon-mobile-menu-links li:nth-child(4) {
+  transition-delay: 280ms;
+}
+.horizon-mobile-menu.open .horizon-mobile-menu-links li:nth-child(5) {
+  transition-delay: 340ms;
+}
+
+.horizon-mobile-menu-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 24px;
+  font-family: 'Magical Source Demo', serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.horizon-mobile-menu-links a:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.horizon-mobile-menu-cta {
+  margin-top: 40px;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: all 0.5s cubic-bezier(0.77, 0, 0.18, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.horizon-mobile-menu.open .horizon-mobile-menu-cta {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 420ms;
+}
+
+.horizon-mobile-cta-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  border-radius: 9999px;
+  padding: 6px 6px 6px 20px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.horizon-mobile-cta-btn:hover {
+  background: white;
+}
+
+/* HERO */
+.horizon-hero-outer {
+  position: relative;
+  height: 100dvh;
+}
+
+.horizon-hero-section {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.horizon-hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.horizon-video-1 {
+  transition: opacity 0.7s;
+}
+
+.horizon-video-1.faded {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.horizon-center-logo-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 25vh;
+}
+
+@media (min-width: 640px) {
+  .horizon-center-logo-wrap {
+    padding-bottom: 30vh;
+  }
+}
+
+.horizon-center-logo-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45vw;
+  height: 45vw;
+  max-width: 320px;
+  max-height: 320px;
+}
+
+@media (min-width: 768px) {
+  .horizon-center-logo-container {
+    width: 30vw;
+    height: 30vw;
+    max-width: 400px;
+    max-height: 400px;
+  }
+}
+
+.horizon-circle-outer {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  opacity: 0;
+  transform: scale(0.75);
+  transition: all 1200ms ease-out;
+  transition-delay: 0ms;
+}
+
+.horizon-circle-inner {
+  position: absolute;
+  inset: 12%;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  opacity: 0;
+  transform: scale(0.75);
+  transition: all 1200ms ease-out;
+  transition-delay: 150ms;
+}
+
+.horizon-center-logo-icon {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 1000ms ease-out;
+  transition-delay: 350ms;
+}
+
+.horizon-center-logo-icon svg {
+  width: 48px;
+  height: 48px;
+  color: white;
+}
+
+@media (min-width: 640px) {
+  .horizon-center-logo-icon svg {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+@media (min-width: 768px) {
+  .horizon-center-logo-icon svg {
+    width: 96px;
+    height: 96px;
+  }
+}
+
+.horizon-hero-section.visible .horizon-circle-outer,
+.horizon-hero-section.visible .horizon-circle-inner {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.horizon-hero-section.visible .horizon-center-logo-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.horizon-bottom-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0 20px 40px;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .horizon-bottom-text {
+    padding: 0 24px 48px;
+  }
+}
+
+@media (min-width: 768px) {
+  .horizon-bottom-text {
+    padding: 0 48px 64px;
+  }
+}
+
+.horizon-bottom-text h1 {
+  font-family: 'Magical Source Demo', serif;
+  color: white;
+  font-size: 24px;
+  line-height: 1.1;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(32px);
+  transition: all 1000ms ease-out;
+  transition-delay: 600ms;
+}
+
+@media (min-width: 640px) {
+  .horizon-bottom-text h1 {
+    font-size: 30px;
+  }
+}
+
+@media (min-width: 768px) {
+  .horizon-bottom-text h1 {
+    font-size: 48px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .horizon-bottom-text h1 {
+    font-size: 60px;
+  }
+}
+
+.horizon-bottom-text p {
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Geist', sans-serif;
+  font-weight: 300;
+  font-size: 12px;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.625;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: all 1000ms ease-out;
+  transition-delay: 850ms;
+}
+
+@media (min-width: 640px) {
+  .horizon-bottom-text p {
+    font-size: 14px;
+    max-width: 448px;
+    margin-top: 16px;
+  }
+}
+
+@media (min-width: 768px) {
+  .horizon-bottom-text p {
+    font-size: 16px;
+    margin-top: 24px;
+  }
+}
+
+.horizon-hero-section.visible .horizon-bottom-text h1,
+.horizon-hero-section.visible .horizon-bottom-text p {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .horizon-circle-outer,
+  .horizon-circle-inner,
+  .horizon-center-logo-icon,
+  .horizon-bottom-text h1,
+  .horizon-bottom-text p,
+  .horizon-mobile-menu-links li,
+  .horizon-mobile-menu-cta {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .horizon-video-1 {
+    transition: none;
+  }
+}
