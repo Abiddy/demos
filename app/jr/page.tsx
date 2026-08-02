@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { BoomerangLanding } from '@/components/jr/BoomerangLanding';
+import { JrDemoClient } from '@/components/demo/JrDemoClient';
 
 export const metadata: Metadata = {
   title: 'JR Construction | Home Renovations Santa Clarita',
@@ -7,7 +8,15 @@ export const metadata: Metadata = {
     'Quality home renovations and construction in Santa Clarita — kitchens, bathrooms, and whole-home projects. Call (818) 625-2609.',
 };
 
-export default function JrPage() {
+type JrPageProps = {
+  searchParams?: { demo?: string };
+};
+
+export default function JrPage({ searchParams }: JrPageProps) {
+  if (searchParams?.demo === '1') {
+    return <JrDemoClient />;
+  }
+
   return (
     <main>
       <BoomerangLanding />

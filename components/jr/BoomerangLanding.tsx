@@ -2,11 +2,15 @@
 
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { jrLandingConfig } from '@/data/jr';
+import { jrLandingConfig, type JrLandingConfig } from '@/data/jr';
 import { JrLogo } from './JrLogo';
 import { BoomerangVideoBg } from './BoomerangVideoBg';
 import { JrAnimatedSection } from './JrAnimatedSection';
 import { JrBlogSection } from './JrBlogSection';
+
+type BoomerangLandingProps = {
+  config?: JrLandingConfig;
+};
 
 function CtaButton({
   className = '',
@@ -58,7 +62,9 @@ function FeatureRow({
   );
 }
 
-export function BoomerangLanding() {
+export function BoomerangLanding({
+  config = jrLandingConfig,
+}: BoomerangLandingProps) {
   const {
     brand,
     navLinks,
@@ -72,7 +78,7 @@ export function BoomerangLanding() {
     featureRows,
     videoSrc,
     sections,
-  } = jrLandingConfig;
+  } = config;
 
   const featureHrefs = ['#services', '#services', '#portfolio'];
 

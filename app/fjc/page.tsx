@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { SpotlightHero } from '@/components/fjc/SpotlightHero';
 import { SiteSections } from '@/components/dope/SiteSections';
+import { FjcDemoClient } from '@/components/demo/FjcDemoClient';
 import { fjcConfig } from '@/data/fjc';
 
 export const metadata: Metadata = {
@@ -9,7 +10,15 @@ export const metadata: Metadata = {
     'Water damage restoration, mold remediation, and emergency services in Hermosa Beach, CA. IICRC certified. Call (310) 343-1263.',
 };
 
-export default function FjcPage() {
+type FjcPageProps = {
+  searchParams?: { demo?: string };
+};
+
+export default function FjcPage({ searchParams }: FjcPageProps) {
+  if (searchParams?.demo === '1') {
+    return <FjcDemoClient />;
+  }
+
   return (
     <main className="bg-black">
       <SpotlightHero config={fjcConfig} />

@@ -1,4 +1,5 @@
 export const horizonConfig = {
+  brandName: 'Shane Homes',
   brand: {
     phone: '(805) 908-7346',
     phoneHref: 'tel:+18059087346',
@@ -23,4 +24,8 @@ export const horizonConfig = {
   },
   subheadline:
     'Buy or sell with a trusted local professional — over a quarter billion in luxury properties sold.',
+  posterImage: undefined as string | undefined,
+  galleryImages: undefined as string[] | undefined,
 };
+
+export type HorizonConfig = typeof horizonConfig;

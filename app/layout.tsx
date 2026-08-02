@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Alpha Structural | Foundation Repair Los Angeles',
+  title: 'Demo Studio | Template Generator',
   description:
-    'The most trusted structural specialist and foundation repair contractor in Los Angeles and Southern California since 1993.',
+    'Generate lightweight template demos for Realtor and Construction sites — no database required.',
 };
 
 export default function RootLayout({

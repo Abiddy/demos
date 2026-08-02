@@ -2,11 +2,17 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { horizonConfig } from '@/data/realtor';
+import { horizonConfig, type HorizonConfig } from '@/data/realtor';
 import { HorizonCtaButton, HorizonLogo } from './HorizonLogo';
 import { ShaneHomesLogo } from './ShaneHomesLogo';
 
-export function HorizonEstatesPage() {
+type HorizonEstatesPageProps = {
+  config?: HorizonConfig;
+};
+
+export function HorizonEstatesPage({
+  config = horizonConfig,
+}: HorizonEstatesPageProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [heroVisible, setHeroVisible] = useState(false);
   const [video1Faded, setVideo1Faded] = useState(false);
@@ -14,8 +20,16 @@ export function HorizonEstatesPage() {
   const swappedRef = useRef(false);
   const touchStartYRef = useRef(0);
 
-  const { navLinks, videos, headline, subheadline, videoSwapDelay, brand } =
-    horizonConfig;
+  const {
+    navLinks,
+    videos,
+    headline,
+    subheadline,
+    videoSwapDelay,
+    brand,
+    brandName,
+    posterImage,
+  } = config;
 
   const setVideoSwap = useCallback((swapped: boolean) => {
     swappedRef.current = swapped;
@@ -106,7 +120,13 @@ export function HorizonEstatesPage() {
   return (
     <div className="horizon-page">
       <nav className="horizon-navbar">
-        <ShaneHomesLogo className="horizon-nav-brand" />
+        {brandName && brandName !== 'Shane Homes' ? (
+          <div className="horizon-nav-brand text-sm font-semibold tracking-[0.18em] uppercase text-white">
+            {brandName}
+          </div>
+        ) : (
+          <ShaneHomesLogo className="horizon-nav-brand" />
+        )}
 
         <ul className="horizon-nav-links">
           {navLinks.map((link) => (
@@ -167,6 +187,7 @@ export function HorizonEstatesPage() {
             playsInline
             preload="auto"
             src={videos.scroll}
+            poster={posterImage}
           />
 
           <video
@@ -175,6 +196,7 @@ export function HorizonEstatesPage() {
             muted
             loop
             playsInline
+            poster={posterImage}
           >
             <source src={videos.loop} type="video/mp4" />
           </video>

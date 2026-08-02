@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { HorizonEstatesPage } from '@/components/realtor/HorizonEstatesPage';
+import { RealtorDemoClient } from '@/components/demo/RealtorDemoClient';
 
 export const metadata: Metadata = {
   title: 'Horizon Estates',
@@ -7,7 +8,15 @@ export const metadata: Metadata = {
     'Where the horizon meets timeless elegance — unparalleled seaside living.',
 };
 
-export default function RealtorPage() {
+type RealtorPageProps = {
+  searchParams?: { demo?: string };
+};
+
+export default function RealtorPage({ searchParams }: RealtorPageProps) {
+  if (searchParams?.demo === '1') {
+    return <RealtorDemoClient />;
+  }
+
   return (
     <main className="h-[100dvh] overflow-hidden">
       <HorizonEstatesPage />
