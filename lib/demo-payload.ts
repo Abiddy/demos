@@ -5,6 +5,7 @@ export type DemoTemplateId =
   | 'realtor-2'
   | 'yani'
   | 'lesli'
+  | 'rudy'
   | 'nummy'
   | 'bakery'
   | 'lomelis'
@@ -33,6 +34,7 @@ export const DEMO_TEMPLATES: {
   { id: 'realtor-2', label: 'Realtor 2', path: '/', staticOnly: true },
   { id: 'yani', label: 'Yani', path: '/yani', staticOnly: true },
   { id: 'lesli', label: 'Lesli Koontz', path: '/lesli', staticOnly: true },
+  { id: 'rudy', label: 'Rudy Zuniga', path: '/rudy', staticOnly: true },
   { id: 'nummy', label: 'Nummy Yummy', path: '/nummy', staticOnly: true },
   {
     id: 'bakery',
