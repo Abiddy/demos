@@ -1,24 +1,31 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { CafeLanding } from '@/components/cafe/CafeLanding';
-import { cafeConfig, type CafeConfig } from '@/data/cafe';
+import { cafeConfig } from '@/data/cafe';
 import { mergeCafeConfig } from '@/lib/demo-merge';
-import { readDemoPayload } from '@/lib/demo-payload';
+import { useDemoPayload } from '@/lib/use-demo-payload';
 
-export function CafeDemoClient() {
-  const [config, setConfig] = useState<CafeConfig>(cafeConfig);
+type CafeDemoClientProps = {
+  demoId?: string;
+};
 
-  useEffect(() => {
-    const payload = readDemoPayload();
-    if (payload?.templateId === 'cafe') {
-      setConfig(mergeCafeConfig(payload));
-    }
-  }, []);
+export function CafeDemoClient({ demoId }: CafeDemoClientProps) {
+  const { payload, status } = useDemoPayload(demoId, 'cafe');
+  const config = useMemo(
+    () => (payload ? mergeCafeConfig(payload) : cafeConfig),
+    [payload],
+  );
 
   return (
     <main>
-      <CafeLanding config={config} />
+      {status === 'loading' ? (
+        <div className="cafe-page flex min-h-screen items-center justify-center text-sm tracking-wide">
+          Loading demo…
+        </div>
+      ) : (
+        <CafeLanding config={config} />
+      )}
     </main>
   );
 }

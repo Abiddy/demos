@@ -13,8 +13,8 @@ type JrPageProps = {
 };
 
 export default function JrPage({ searchParams }: JrPageProps) {
-  if (searchParams?.demo === '1') {
-    return <JrDemoClient />;
+  if (searchParams?.demo) {
+    return <JrDemoClient demoId={searchParams.demo} />;
   }
 
   return (

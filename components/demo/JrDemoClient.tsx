@@ -1,20 +1,29 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { BoomerangLanding } from '@/components/jr/BoomerangLanding';
-import { jrLandingConfig, type JrLandingConfig } from '@/data/jr';
+import { jrLandingConfig } from '@/data/jr';
 import { mergeJrConfig } from '@/lib/demo-merge';
-import { readDemoPayload } from '@/lib/demo-payload';
+import { useDemoPayload } from '@/lib/use-demo-payload';
 
-export function JrDemoClient() {
-  const [config, setConfig] = useState<JrLandingConfig>(jrLandingConfig);
+type JrDemoClientProps = {
+  demoId?: string;
+};
 
-  useEffect(() => {
-    const payload = readDemoPayload();
-    if (payload?.templateId === 'construction-2') {
-      setConfig(mergeJrConfig(payload));
-    }
-  }, []);
+export function JrDemoClient({ demoId }: JrDemoClientProps) {
+  const { payload, status } = useDemoPayload(demoId, 'construction-2');
+  const config = useMemo(
+    () => (payload ? mergeJrConfig(payload) : jrLandingConfig),
+    [payload],
+  );
+
+  if (status === 'loading') {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-white text-sm text-black/60">
+        Loading demo…
+      </main>
+    );
+  }
 
   return (
     <main>

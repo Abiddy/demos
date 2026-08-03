@@ -1,22 +1,30 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { SpotlightHero } from '@/components/fjc/SpotlightHero';
 import { SiteSections } from '@/components/dope/SiteSections';
 import { fjcConfig } from '@/data/fjc';
 import { mergeFjcConfig } from '@/lib/demo-merge';
-import { readDemoPayload } from '@/lib/demo-payload';
-import type { SiteConfig } from '@/types/site-config';
+import { useDemoPayload } from '@/lib/use-demo-payload';
 
-export function FjcDemoClient() {
-  const [config, setConfig] = useState<SiteConfig>(fjcConfig);
+type FjcDemoClientProps = {
+  demoId?: string;
+};
 
-  useEffect(() => {
-    const payload = readDemoPayload();
-    if (payload?.templateId === 'construction') {
-      setConfig(mergeFjcConfig(payload));
-    }
-  }, []);
+export function FjcDemoClient({ demoId }: FjcDemoClientProps) {
+  const { payload, status } = useDemoPayload(demoId, 'construction');
+  const config = useMemo(
+    () => (payload ? mergeFjcConfig(payload) : fjcConfig),
+    [payload],
+  );
+
+  if (status === 'loading') {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-black text-sm text-white/70">
+        Loading demo…
+      </main>
+    );
+  }
 
   return (
     <main className="bg-black">

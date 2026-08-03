@@ -10,6 +10,7 @@ import {
 } from 'react';
 import {
   compressImageFile,
+  createShareableDemo,
   DEMO_TEMPLATES,
   saveDemoPayload,
   type DemoTemplateId,
@@ -39,6 +40,8 @@ export function DemoGenerator() {
   const [images, setImages] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const selectedTemplate = useMemo(
@@ -86,12 +89,32 @@ export function DemoGenerator() {
     setForm(EMPTY_FORM);
     setImages([]);
     setError(null);
+    setShareUrl(null);
+    setCopied(false);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
+    setCopied(false);
+
+    if (selectedTemplate.staticOnly) {
+      setSubmitting(true);
+      try {
+        const absoluteUrl = `${window.location.origin}${selectedTemplate.path}`;
+        setShareUrl(absoluteUrl);
+        const opened = window.open(selectedTemplate.path, '_blank');
+        if (!opened) {
+          setError(
+            'Popup blocked. Your link is ready below — copy it instead.',
+          );
+        }
+      } finally {
+        setSubmitting(false);
+      }
+      return;
+    }
 
     if (!form.businessName.trim()) {
       setError('Business name is required.');
@@ -110,28 +133,47 @@ export function DemoGenerator() {
       return;
     }
 
+    const payload = {
+      templateId,
+      businessName: form.businessName.trim(),
+      phone: form.phone.trim(),
+      address: form.address.trim(),
+      description: form.description.trim(),
+      tagline: form.tagline.trim(),
+      images,
+    };
+
     setSubmitting(true);
     try {
-      saveDemoPayload({
-        templateId,
-        businessName: form.businessName.trim(),
-        phone: form.phone.trim(),
-        address: form.address.trim(),
-        description: form.description.trim(),
-        tagline: form.tagline.trim(),
-        images,
-      });
+      saveDemoPayload(payload);
+      const { path } = await createShareableDemo(payload);
+      const absoluteUrl = `${window.location.origin}${path}`;
+      setShareUrl(absoluteUrl);
 
-      const opened = window.open(selectedTemplate.href, '_blank');
+      const opened = window.open(path, '_blank');
       if (!opened) {
-        setError('Popup blocked. Allow popups for this site, then try again.');
+        setError(
+          'Popup blocked. Your shareable link is ready below — copy it instead.',
+        );
       }
-    } catch {
+    } catch (err) {
       setError(
-        'Could not save demo data. Images may be too large — try fewer or smaller files.',
+        err instanceof Error
+          ? err.message
+          : 'Could not create shareable demo. Try fewer or smaller images.',
       );
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const copyShareUrl = async () => {
+    if (!shareUrl) return;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+    } catch {
+      setError('Could not copy link. Select it and copy manually.');
     }
   };
 
@@ -146,8 +188,8 @@ export function DemoGenerator() {
             Templates
           </h1>
           <p className="mt-3 text-sm leading-relaxed text-[#9a958c]">
-            Pick a template, fill in the business details, and open a live preview
-            in a new tab.
+            Pick a template, fill in the business details, then open a preview and
+            copy a shareable link.
           </p>
 
           <nav className="mt-8 flex gap-2 overflow-x-auto lg:flex-col lg:gap-1">
@@ -157,7 +199,11 @@ export function DemoGenerator() {
                 <button
                   key={template.id}
                   type="button"
-                  onClick={() => setTemplateId(template.id)}
+                  onClick={() => {
+                    setTemplateId(template.id);
+                    setShareUrl(null);
+                    setCopied(false);
+                  }}
                   className={`whitespace-nowrap rounded-md px-4 py-3 text-left text-sm transition-colors ${
                     active
                       ? 'bg-white text-[#0f1115]'
@@ -191,101 +237,144 @@ export function DemoGenerator() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid gap-5 sm:grid-cols-2">
-              <Field label="Business name" required>
-                <input
-                  value={form.businessName}
-                  onChange={updateField('businessName')}
-                  className={inputClass}
-                  placeholder="Acme Construction"
-                  required
-                />
-              </Field>
-              <Field label="Phone" required>
-                <input
-                  value={form.phone}
-                  onChange={updateField('phone')}
-                  className={inputClass}
-                  placeholder="(555) 123-4567"
-                  required
-                />
-              </Field>
-            </div>
+            {selectedTemplate.staticOnly ? (
+              <p className="rounded-md border border-white/10 bg-[#181b21] px-4 py-4 text-sm leading-relaxed text-[#c9c4ba]">
+                <span className="text-white">{selectedTemplate.label}</span> is a
+                fixed showcase template (Velar.). Open it directly — custom form
+                fill is not available for this one yet.
+              </p>
+            ) : (
+              <>
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <Field label="Business name" required>
+                    <input
+                      value={form.businessName}
+                      onChange={updateField('businessName')}
+                      className={inputClass}
+                      placeholder="Acme Construction"
+                      required
+                    />
+                  </Field>
+                  <Field label="Phone" required>
+                    <input
+                      value={form.phone}
+                      onChange={updateField('phone')}
+                      className={inputClass}
+                      placeholder="(555) 123-4567"
+                      required
+                    />
+                  </Field>
+                </div>
 
-            <Field label="Address" required>
-              <input
-                value={form.address}
-                onChange={updateField('address')}
-                className={inputClass}
-                placeholder="123 Main St, Los Angeles, CA"
-                required
-              />
-            </Field>
+                <Field label="Address" required>
+                  <input
+                    value={form.address}
+                    onChange={updateField('address')}
+                    className={inputClass}
+                    placeholder="123 Main St, Los Angeles, CA"
+                    required
+                  />
+                </Field>
 
-            <Field
-              label="Tagline / headline"
-              hint="Optional. Use a period, |, or a line break for two headline lines."
-            >
-              <input
-                value={form.tagline}
-                onChange={updateField('tagline')}
-                className={inputClass}
-                placeholder="Built to last. Crafted with care."
-              />
-            </Field>
+                <Field
+                  label="Tagline / headline"
+                  hint="Optional. Use a period, |, or a line break for two headline lines."
+                >
+                  <input
+                    value={form.tagline}
+                    onChange={updateField('tagline')}
+                    className={inputClass}
+                    placeholder="Built to last. Crafted with care."
+                  />
+                </Field>
 
-            <Field label="Description" required>
-              <textarea
-                value={form.description}
-                onChange={updateField('description')}
-                className={`${inputClass} min-h-[120px] resize-y`}
-                placeholder="A short description for the hero and about sections."
-                required
-              />
-            </Field>
+                <Field label="Description" required>
+                  <textarea
+                    value={form.description}
+                    onChange={updateField('description')}
+                    className={`${inputClass} min-h-[120px] resize-y`}
+                    placeholder="A short description for the hero and about sections."
+                    required
+                  />
+                </Field>
 
-            <Field
-              label="Images"
-              hint={`Up to ${MAX_IMAGES}. Compressed in-browser — not stored on a server.`}
-            >
-              <div className="space-y-3">
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handleImages}
-                  className="block w-full text-sm text-[#9a958c] file:mr-4 file:rounded-md file:border-0 file:bg-white file:px-4 file:py-2 file:text-sm file:font-medium file:text-[#0f1115] hover:file:bg-[#e8e6e1]"
-                />
+                <Field
+                  label="Images"
+                  hint={`Up to ${MAX_IMAGES}. Compressed in-browser before upload.`}
+                >
+                  <div className="space-y-3">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleImages}
+                      className="block w-full text-sm text-[#9a958c] file:mr-4 file:rounded-md file:border-0 file:bg-white file:px-4 file:py-2 file:text-sm file:font-medium file:text-[#0f1115] hover:file:bg-[#e8e6e1]"
+                    />
 
-                {images.length > 0 ? (
-                  <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
-                    {images.map((src, index) => (
-                      <li key={`${index}-${src.slice(0, 24)}`} className="relative">
-                        <img
-                          src={src}
-                          alt={`Upload ${index + 1}`}
-                          className="aspect-square w-full rounded-md object-cover"
-                        />
-
-                        <button
-                          type="button"
-                          onClick={() => removeImage(index)}
-                          className="absolute right-1.5 top-1.5 rounded bg-black/70 px-2 py-0.5 text-xs text-white"
-                        >
-                          Remove
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-              </div>
-            </Field>
+                    {images.length > 0 ? (
+                      <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
+                        {images.map((src, index) => (
+                          <li
+                            key={`${index}-${src.slice(0, 24)}`}
+                            className="relative"
+                          >
+                            <img
+                              src={src}
+                              alt={`Upload ${index + 1}`}
+                              className="aspect-square w-full rounded-md object-cover"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeImage(index)}
+                              className="absolute right-1.5 top-1.5 rounded bg-black/70 px-2 py-0.5 text-xs text-white"
+                            >
+                              Remove
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </div>
+                </Field>
+              </>
+            )}
 
             {error ? (
               <p className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
                 {error}
               </p>
+            ) : null}
+
+            {shareUrl ? (
+              <div className="rounded-md border border-white/10 bg-[#181b21] px-4 py-4">
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-[#9a958c]">
+                  Shareable link
+                </p>
+                <p className="mt-2 break-all text-sm text-white">{shareUrl}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={copyShareUrl}
+                    className="rounded-md bg-white px-4 py-2 text-sm font-medium text-[#0f1115]"
+                  >
+                    {copied ? 'Copied' : 'Copy link'}
+                  </button>
+                  <a
+                    href={shareUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-md border border-white/20 px-4 py-2 text-sm text-[#c9c4ba] hover:text-white"
+                  >
+                    Open again
+                  </a>
+                </div>
+                <p className="mt-3 text-xs text-[#7a756c]">
+                  {selectedTemplate.staticOnly
+                    ? 'This opens the Velar. showcase template.'
+                    : 'Anyone with this link can view the filled demo. Links expire after 14 days, or sooner if the server redeploys.'}
+                </p>
+              </div>
             ) : null}
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -294,10 +383,16 @@ export function DemoGenerator() {
                 disabled={submitting}
                 className="rounded-md bg-white px-6 py-3 text-sm font-medium text-[#0f1115] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {submitting ? 'Preparing…' : 'Open demo in new tab'}
+                {submitting
+                  ? 'Opening…'
+                  : selectedTemplate.staticOnly
+                    ? 'Open template & copy link'
+                    : 'Create demo & copy link'}
               </button>
               <p className="text-xs text-[#9a958c]">
-                Nothing is saved. Close the tab and the demo data is gone.
+                {selectedTemplate.staticOnly
+                  ? 'Opens the Velar. landing page in a new tab.'
+                  : 'Opens a preview and gives you a link you can send to anyone.'}
               </p>
             </div>
           </form>

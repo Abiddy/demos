@@ -2,6 +2,7 @@ export type DemoTemplateId =
   | 'construction'
   | 'construction-2'
   | 'realtor'
+  | 'realtor-2'
   | 'cafe';
 
 export type DemoPayload = {
@@ -19,13 +20,50 @@ export const DEMO_STORAGE_KEY = 'demoPayload';
 export const DEMO_TEMPLATES: {
   id: DemoTemplateId;
   label: string;
-  href: string;
+  path: string;
+  /** When true, generator opens the static template only (no shareable fill). */
+  staticOnly?: boolean;
 }[] = [
-  { id: 'realtor', label: 'Realtor', href: '/realtor?demo=1' },
-  { id: 'cafe', label: 'Cafe', href: '/cafe?demo=1' },
-  { id: 'construction', label: 'Construction', href: '/fjc?demo=1' },
-  { id: 'construction-2', label: 'Construction 2', href: '/jr?demo=1' },
+  { id: 'realtor', label: 'Realtor', path: '/realtor' },
+  { id: 'realtor-2', label: 'Realtor 2', path: '/realtor2', staticOnly: true },
+  { id: 'cafe', label: 'Cafe', path: '/cafe' },
+  { id: 'construction', label: 'Construction', path: '/fjc' },
+  { id: 'construction-2', label: 'Construction 2', path: '/jr' },
 ];
+
+export function getTemplatePath(templateId: DemoTemplateId): string {
+  return (
+    DEMO_TEMPLATES.find((template) => template.id === templateId)?.path ?? '/'
+  );
+}
+
+export function buildDemoSharePath(
+  templateId: DemoTemplateId,
+  demoId: string,
+): string {
+  return `${getTemplatePath(templateId)}?demo=${encodeURIComponent(demoId)}`;
+}
+
+export async function createShareableDemo(
+  payload: DemoPayload,
+): Promise<{ id: string; path: string }> {
+  const res = await fetch('/api/demo', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const data = (await res.json().catch(() => null)) as { error?: string } | null;
+    throw new Error(data?.error || 'Could not create shareable demo.');
+  }
+
+  const data = (await res.json()) as { id: string };
+  return {
+    id: data.id,
+    path: buildDemoSharePath(payload.templateId, data.id),
+  };
+}
 
 export function saveDemoPayload(payload: DemoPayload): void {
   const raw = JSON.stringify(payload);

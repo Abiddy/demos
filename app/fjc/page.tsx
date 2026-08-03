@@ -15,8 +15,8 @@ type FjcPageProps = {
 };
 
 export default function FjcPage({ searchParams }: FjcPageProps) {
-  if (searchParams?.demo === '1') {
-    return <FjcDemoClient />;
+  if (searchParams?.demo) {
+    return <FjcDemoClient demoId={searchParams.demo} />;
   }
 
   return (

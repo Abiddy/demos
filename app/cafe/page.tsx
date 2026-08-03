@@ -13,8 +13,8 @@ type CafePageProps = {
 };
 
 export default function CafePage({ searchParams }: CafePageProps) {
-  if (searchParams?.demo === '1') {
-    return <CafeDemoClient />;
+  if (searchParams?.demo) {
+    return <CafeDemoClient demoId={searchParams.demo} />;
   }
 
   return (

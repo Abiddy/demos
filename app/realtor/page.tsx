@@ -13,8 +13,8 @@ type RealtorPageProps = {
 };
 
 export default function RealtorPage({ searchParams }: RealtorPageProps) {
-  if (searchParams?.demo === '1') {
-    return <RealtorDemoClient />;
+  if (searchParams?.demo) {
+    return <RealtorDemoClient demoId={searchParams.demo} />;
   }
 
   return (
