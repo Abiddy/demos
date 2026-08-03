@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Luxurious+Script&family=Manrope:wght@500&family=Open+Sans:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+
+.bakery-page {
+  --background: 0 0% 9%;
+  --foreground: 0 0% 100%;
+  --primary: 0 0% 100%;
+  --primary-foreground: 0 0% 9%;
+  --secondary: 0 0% 97%;
+  --muted: 0 0% 20%;
+  --muted-foreground: 0 0% 75%;
+  --accent: 0 0% 15%;
+  --border: 0 0% 20%;
+  --radius: 2px;
+  --hero-cta-bg: 0 0% 97.3%;
+  --hero-cta-text: 0 0% 9%;
+
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: 'Open Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+.bakery-page .split-char {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  line-height: 1 !important;
+  display: inline-block;
+}
+
+.bakery-page .gallery-card-img {
+  transition: transform 6s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.bakery-page .gallery-card:hover .gallery-card-img {
+  transform: scale(1.2);
+}
+
+.bakery-page .partner-marquee:hover .partner-marquee-track {
+  animation-play-state: paused;
+}
+
+.bakery-page .partner-marquee-track {
+  animation: bakery-marquee 60s linear infinite;
+}
+
+@keyframes bakery-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}

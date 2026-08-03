@@ -234,7 +234,6 @@ export function NummyLanding() {
 
   return (
     <div className="nummy-page min-h-screen bg-white text-[#1a1a1a]">
-      {/* Announcement */}
       <div className="absolute top-0 left-0 right-0 z-30 bg-[#F9F4F0] text-black">
         <div className="relative flex items-center justify-center gap-3 px-4 py-2.5 sm:py-3">
           <ChevronLeft size={16} className="shrink-0 opacity-70" aria-hidden />
@@ -245,7 +244,6 @@ export function NummyLanding() {
         </div>
       </div>
 
-      {/* Nav */}
       <nav className="absolute top-[38px] sm:top-[42px] left-0 right-0 z-30 text-white">
         <div className="flex items-center justify-between px-4 sm:px-6 lg:px-10 py-4">
           <a
@@ -305,7 +303,6 @@ export function NummyLanding() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
       <div
         className={`fixed inset-0 z-40 bg-black/95 backdrop-blur-sm transition-opacity duration-500 ${
           menuOpen
@@ -336,7 +333,6 @@ export function NummyLanding() {
         </ul>
       </div>
 
-      {/* SECTION 1: Hero */}
       <section
         id="top"
         className="relative flex min-h-screen flex-col lg:flex-row"
@@ -450,7 +446,6 @@ export function NummyLanding() {
         </div>
       </section>
 
-      {/* SECTION 2: Best sellers */}
       <section
         id="menu"
         className="bg-[#F9F4F0] text-black py-12 sm:py-16 px-4 sm:px-6 lg:px-10"
@@ -547,7 +542,6 @@ export function NummyLanding() {
         </div>
       </section>
 
-      {/* SECTION 3: Categories */}
       <section id="flavors" className="bg-black text-white">
         <FadeIn
           y={12}
@@ -585,7 +579,6 @@ export function NummyLanding() {
         </FadeIn>
       </section>
 
-      {/* Visit / contact */}
       <section
         id="visit"
         className="bg-[#F9F4F0] text-black px-4 sm:px-6 lg:px-10 py-14 sm:py-20"
