@@ -1,16 +1,16 @@
 import type { Metadata } from 'next';
-import { VelarLanding } from '@/components/realtor2/VelarLanding';
+import { HomeMineLanding } from '@/components/realtor2/HomeMineLanding';
 
 export const metadata: Metadata = {
-  title: 'Velar. | Live in Irreplaceable',
+  title: 'HomeMine | Chris Jones, Realtor — Sell for Just 1.5%',
   description:
-    'Stately homes built with vision, scope, and architectural finesse.',
+    'Get the best price for your home with HomeMine. Sell with Chris Jones, Realtor, for a 1.5% listing fee. Call or text (310) 658-7060.',
 };
 
 export default function Realtor2Page() {
   return (
     <main>
-      <VelarLanding />
+      <HomeMineLanding />
     </main>
   );
 }

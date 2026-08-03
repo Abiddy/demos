@@ -240,8 +240,8 @@ export function DemoGenerator() {
             {selectedTemplate.staticOnly ? (
               <p className="rounded-md border border-white/10 bg-[#181b21] px-4 py-4 text-sm leading-relaxed text-[#c9c4ba]">
                 <span className="text-white">{selectedTemplate.label}</span> is a
-                fixed showcase template (Velar.). Open it directly — custom form
-                fill is not available for this one yet.
+                fixed showcase template (HomeMine / Chris Jones). Open it
+                directly — custom form fill is not available for this one yet.
               </p>
             ) : (
               <>
@@ -371,7 +371,7 @@ export function DemoGenerator() {
                 </div>
                 <p className="mt-3 text-xs text-[#7a756c]">
                   {selectedTemplate.staticOnly
-                    ? 'This opens the Velar. showcase template.'
+                    ? 'This opens the HomeMine / Chris Jones showcase template.'
                     : 'Anyone with this link can view the filled demo. Links expire after 14 days, or sooner if the server redeploys.'}
                 </p>
               </div>
@@ -391,7 +391,7 @@ export function DemoGenerator() {
               </button>
               <p className="text-xs text-[#9a958c]">
                 {selectedTemplate.staticOnly
-                  ? 'Opens the Velar. landing page in a new tab.'
+                  ? 'Opens the HomeMine landing page in a new tab.'
                   : 'Opens a preview and gives you a link you can send to anyone.'}
               </p>
             </div>
