@@ -6,6 +6,7 @@ export type DemoTemplateId =
   | 'yani'
   | 'lesli'
   | 'rudy'
+  | 'kay'
   | 'nummy'
   | 'bakery'
   | 'lomelis'
@@ -35,6 +36,7 @@ export const DEMO_TEMPLATES: {
   { id: 'yani', label: 'Yani', path: '/yani', staticOnly: true },
   { id: 'lesli', label: 'Lesli Koontz', path: '/lesli', staticOnly: true },
   { id: 'rudy', label: 'Rudy Zuniga', path: '/rudy', staticOnly: true },
+  { id: 'kay', label: 'Kay Corken', path: '/kay', staticOnly: true },
   { id: 'nummy', label: 'Nummy Yummy', path: '/nummy', staticOnly: true },
   {
     id: 'bakery',
