@@ -25,7 +25,7 @@ export const DEMO_TEMPLATES: {
   staticOnly?: boolean;
 }[] = [
   { id: 'realtor', label: 'Realtor', path: '/realtor' },
-  { id: 'realtor-2', label: 'Realtor 2', path: '/realtor2', staticOnly: true },
+  { id: 'realtor-2', label: 'Realtor 2', path: '/', staticOnly: true },
   { id: 'cafe', label: 'Cafe', path: '/cafe' },
   { id: 'construction', label: 'Construction', path: '/fjc' },
   { id: 'construction-2', label: 'Construction 2', path: '/jr' },
