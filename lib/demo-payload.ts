@@ -4,6 +4,7 @@ export type DemoTemplateId =
   | 'realtor'
   | 'realtor-2'
   | 'yani'
+  | 'nummy'
   | 'cafe';
 
 export type DemoPayload = {
@@ -28,6 +29,7 @@ export const DEMO_TEMPLATES: {
   { id: 'realtor', label: 'Realtor', path: '/realtor' },
   { id: 'realtor-2', label: 'Realtor 2', path: '/', staticOnly: true },
   { id: 'yani', label: 'Yani', path: '/yani', staticOnly: true },
+  { id: 'nummy', label: 'Nummy Yummy', path: '/nummy', staticOnly: true },
   { id: 'cafe', label: 'Cafe', path: '/cafe' },
   { id: 'construction', label: 'Construction', path: '/fjc' },
   { id: 'construction-2', label: 'Construction 2', path: '/jr' },
