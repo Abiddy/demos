@@ -16,6 +16,7 @@ const SITES = [
   { href: '/lomelis', label: "Lomeli's Italian", path: '/lomelis' },
   { href: '/3322', label: "lil' Vegerie", path: '/3322' },
   { href: '/wildflower', label: 'Wildflower Cafe', path: '/wildflower' },
+  { href: '/tamistea', label: 'tamistea', path: '/tamistea' },
   { href: '/vasq', label: 'Viktor Oddy', path: '/vasq' },
 ] as const;
 
