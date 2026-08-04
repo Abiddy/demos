@@ -7,6 +7,8 @@ export type DemoTemplateId =
   | 'lesli'
   | 'rudy'
   | 'kay'
+  | 'vasq'
+  | 'vegerie'
   | 'nummy'
   | 'bakery'
   | 'lomelis'
@@ -45,9 +47,21 @@ export const DEMO_TEMPLATES: {
     staticOnly: true,
   },
   { id: 'lomelis', label: "Lomeli's", path: '/lomelis', staticOnly: true },
+  {
+    id: 'vegerie',
+    label: "lil' Vegerie",
+    path: '/3322',
+    staticOnly: true,
+  },
   { id: 'cafe', label: 'Cafe', path: '/cafe' },
   { id: 'construction', label: 'Construction', path: '/fjc' },
   { id: 'construction-2', label: 'Construction 2', path: '/jr' },
+  {
+    id: 'vasq',
+    label: 'Vasquez Construction',
+    path: '/vasq',
+    staticOnly: true,
+  },
 ];
 
 export function getTemplatePath(templateId: DemoTemplateId): string {
