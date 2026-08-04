@@ -149,13 +149,34 @@ export function VegerieLanding() {
     <div className="lomelis-page vegerie-page">
       <div ref={containerRef} className="relative w-full h-[600vh] bg-black">
         <div className="sticky top-0 w-full h-screen overflow-hidden text-white">
-          <img
-            src="/3322/bowl-protein.jpg"
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover z-0"
-          />
+          <div className="absolute inset-0 z-0 grid grid-cols-3">
+            <div className="relative h-full overflow-hidden">
+              <img
+                src="/3322/bowl-veggie.jpg"
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            </div>
+            <div className="relative h-full overflow-hidden bg-black">
+              <video
+                className="absolute inset-0 h-full w-full object-cover"
+                src="/3322/hero-loop.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+            </div>
+            <div className="relative h-full overflow-hidden">
+              <img
+                src="/3322/bowl-avocado.jpg"
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            </div>
+          </div>
 
-          <div className="absolute inset-0 bg-black/55 z-0" />
+          <div className="absolute inset-0 bg-black/45 z-[1]" />
 
           <div
             className="absolute z-10 w-[80vw]"
