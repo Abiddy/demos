@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('https://assets.website-files.com/6009ec8cda7f305645c9d91b/60176f9bb43e36419997ecfe_PPNeueMontreal-Book.otf')
+    format('opentype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('https://assets.website-files.com/6009ec8cda7f305645c9d91b/60176f9b39c5673e51a86f5a_PPNeueMontreal-Medium.otf')
+    format('opentype');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Mondwest';
+  src: url('/PPMondwest-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+.viktor-page {
+  background: #fff;
+  color: #051a24;
+  font-family: 'PP Neue Montreal', system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.viktor-page .font-mondwest {
+  font-family: 'PP Mondwest', 'Instrument Serif', 'Iowan Old Style', Georgia,
+    serif;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.viktor-page .animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes viktor-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.viktor-page .animate-marquee {
+  animation: viktor-marquee 30s linear infinite;
+}
+
+@media (max-width: 768px) {
+  .viktor-page .animate-marquee {
+    animation-duration: 10s;
+  }
+}
+
+.viktor-btn-primary {
+  box-shadow:
+    0 1px 2px 0 rgba(5, 26, 36, 0.1),
+    0 4px 4px 0 rgba(5, 26, 36, 0.09),
+    0 9px 6px 0 rgba(5, 26, 36, 0.05),
+    0 17px 7px 0 rgba(5, 26, 36, 0.01),
+    0 26px 7px 0 rgba(5, 26, 36, 0),
+    inset 0 2px 8px 0 rgba(255, 255, 255, 0.5);
+}
+
+.viktor-btn-secondary {
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.05),
+    0 4px 30px rgba(0, 0, 0, 0.08);
+}
+
+.viktor-btn-tertiary {
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.05),
+    0 4px 30px rgba(0, 0, 0, 0.08),
+    inset 0 2px 8px 0 rgba(255, 255, 255, 0.5);
+}
+
+.viktor-bottom-nav {
+  box-shadow:
+    0 1px 2px 0 rgba(5, 26, 36, 0.1),
+    0 4px 4px 0 rgba(5, 26, 36, 0.09),
+    0 9px 6px 0 rgba(5, 26, 36, 0.05),
+    0 17px 7px 0 rgba(5, 26, 36, 0.01),
+    0 26px 7px 0 rgba(5, 26, 36, 0);
+}
+
+@keyframes viktorSpawnOut {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(var(--spawn-rot, 0deg));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7) rotate(var(--spawn-rot, 0deg));
+  }
+}
+
+.viktor-spawn {
+  animation: viktorSpawnOut 1000ms ease forwards;
+}

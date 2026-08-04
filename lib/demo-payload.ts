@@ -58,7 +58,7 @@ export const DEMO_TEMPLATES: {
   { id: 'construction-2', label: 'Construction 2', path: '/jr' },
   {
     id: 'vasq',
-    label: 'Vasquez Construction',
+    label: 'Viktor Oddy',
     path: '/vasq',
     staticOnly: true,
   },

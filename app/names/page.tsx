@@ -15,7 +15,7 @@ const SITES = [
   { href: '/bakery', label: 'Bakery Facilities', path: '/bakery' },
   { href: '/lomelis', label: "Lomeli's Italian", path: '/lomelis' },
   { href: '/3322', label: "lil' Vegerie", path: '/3322' },
-  { href: '/vasq', label: 'Vasquez Construction', path: '/vasq' },
+  { href: '/vasq', label: 'Viktor Oddy', path: '/vasq' },
 ] as const;
 
 export default function NamesPage() {
