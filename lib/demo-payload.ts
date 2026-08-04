@@ -9,6 +9,7 @@ export type DemoTemplateId =
   | 'kay'
   | 'vasq'
   | 'vegerie'
+  | 'wildflower'
   | 'nummy'
   | 'bakery'
   | 'lomelis'
@@ -51,6 +52,12 @@ export const DEMO_TEMPLATES: {
     id: 'vegerie',
     label: "lil' Vegerie",
     path: '/3322',
+    staticOnly: true,
+  },
+  {
+    id: 'wildflower',
+    label: 'Wildflower Cafe',
+    path: '/wildflower',
     staticOnly: true,
   },
   { id: 'cafe', label: 'Cafe', path: '/cafe' },

@@ -71,7 +71,7 @@ export function TestimonialCarousel() {
     () => [...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS],
     [],
   );
-  const [index, setIndex] = useState(TESTIMONIALS.length);
+  const [index, setIndex] = useState<number>(TESTIMONIALS.length);
   const [paused, setPaused] = useState(false);
   const [cardWidth, setCardWidth] = useState(427.5);
 
