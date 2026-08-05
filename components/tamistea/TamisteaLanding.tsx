@@ -9,7 +9,7 @@ import {
   useMotionValue,
 } from 'motion/react';
 import { MapPin, Clock3, Instagram } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import OrbitImages from '@/components/lomelis/OrbitImages';
 
 const MENU_URL = '#menu';
@@ -66,23 +66,7 @@ const FEATURED = [
 
 export function TamisteaLanding() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const heroVideoRef = useRef<HTMLVideoElement>(null);
   const prevScroll = useRef(0);
-
-  useEffect(() => {
-    const video = heroVideoRef.current;
-    if (!video) return;
-    const setRate = () => {
-      video.playbackRate = 0.5;
-    };
-    setRate();
-    video.addEventListener('loadedmetadata', setRate);
-    video.addEventListener('play', setRate);
-    return () => {
-      video.removeEventListener('loadedmetadata', setRate);
-      video.removeEventListener('play', setRate);
-    };
-  }, []);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -174,7 +158,6 @@ export function TamisteaLanding() {
             </div>
             <div className="relative h-full overflow-hidden bg-black">
               <video
-                ref={heroVideoRef}
                 className="absolute inset-0 h-full w-full object-cover"
                 src="/tamistea/hero-loop.mp4"
                 autoPlay
