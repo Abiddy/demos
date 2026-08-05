@@ -9,7 +9,7 @@ import {
   useMotionValue,
 } from 'motion/react';
 import { MapPin, Clock3, Instagram } from 'lucide-react';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import OrbitImages from '@/components/lomelis/OrbitImages';
 
 const MENU_URL = '#menu';
@@ -20,40 +20,40 @@ const INSTAGRAM = 'https://www.instagram.com/';
 
 const orbitDishes = [
   {
-    src: '/tamistea/strawberry-croissant.jpg',
-    name: 'Strawberry Cream Croissant',
-    description: 'Flaky croissant, whipped cream & fresh strawberries.',
-    price: '$8.50',
+    src: '/tamistea/breaky-sando.jpg',
+    name: 'Breaky Sando',
+    description: 'English muffin, fried egg, melted cheddar & crispy bacon.',
+    price: '$12',
   },
   {
-    src: '/tamistea/drinks.jpg',
-    name: 'Iced Matcha Latte',
-    description: 'Vibrant matcha, ice, and a soft cold-foam finish.',
+    src: '/tamistea/buko-pandan.jpg',
+    name: 'Buko Pandan Matcha Latte',
+    description: 'Uji matcha, pandan coconut cream & honey salted vanilla foam.',
+    price: '$7.50',
+  },
+  {
+    src: '/tamistea/ube-pudding.jpg',
+    name: 'Ube Banana Pudding',
+    description: 'Swirled ube & banana pudding in the signature cup.',
     price: '$6.50',
   },
   {
-    src: '/tamistea/drinks.jpg',
-    name: 'Ube Cold Foam Latte',
-    description: 'Creamy iced latte topped with pastel ube foam.',
-    price: '$6.75',
-  },
-  {
-    src: '/tamistea/cookies.jpg',
-    name: 'Chocolate Chip Cookies',
-    description: 'Warm bakery classics — soft centers, crisp edges.',
+    src: '/tamistea/cookies-tray.jpg',
+    name: 'Signature Cookies',
+    description: 'Matcha, ube, champurrado, Nutella walnut & double chocolate.',
     price: '$4.50',
   },
   {
-    src: '/tamistea/matcha-hand.jpg',
-    name: 'Matcha Cold Foam',
-    description: 'House matcha with thick foam & a dusting of powder.',
-    price: '$6.50',
+    src: '/tamistea/muffins.jpg',
+    name: 'Blueberry Crumble Muffins',
+    description: 'Bakery muffins with jammy blueberries & streusel tops.',
+    price: '$4.75',
   },
   {
-    src: '/tamistea/interior.jpg',
-    name: 'Cafe Favorites',
-    description: 'Coffee, pastries & a bright Torrance Village hangout.',
-    price: '$10–20',
+    src: '/tamistea/toast-tray.jpg',
+    name: 'Cafe Toast Board',
+    description: 'Tomato pesto toast & PB Nutella banana toast.',
+    price: '$11',
   },
 ] as const;
 
@@ -66,7 +66,23 @@ const FEATURED = [
 
 export function TamisteaLanding() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
   const prevScroll = useRef(0);
+
+  useEffect(() => {
+    const video = heroVideoRef.current;
+    if (!video) return;
+    const setRate = () => {
+      video.playbackRate = 0.5;
+    };
+    setRate();
+    video.addEventListener('loadedmetadata', setRate);
+    video.addEventListener('play', setRate);
+    return () => {
+      video.removeEventListener('loadedmetadata', setRate);
+      video.removeEventListener('play', setRate);
+    };
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -151,21 +167,25 @@ export function TamisteaLanding() {
           <div className="absolute inset-0 z-0 grid grid-cols-3">
             <div className="relative h-full overflow-hidden">
               <img
-                src="/tamistea/strawberry-croissant.jpg"
+                src="/tamistea/breaky-sando.jpg"
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover"
               />
             </div>
-            <div className="relative h-full overflow-hidden">
-              <img
-                src="/tamistea/drinks.jpg"
-                alt=""
+            <div className="relative h-full overflow-hidden bg-black">
+              <video
+                ref={heroVideoRef}
                 className="absolute inset-0 h-full w-full object-cover"
+                src="/tamistea/hero-loop.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
               />
             </div>
             <div className="relative h-full overflow-hidden">
               <img
-                src="/tamistea/cookies.jpg"
+                src="/tamistea/cookies-tray.jpg"
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover"
               />
@@ -412,8 +432,8 @@ export function TamisteaLanding() {
           </div>
           <div className="relative aspect-[4/5] overflow-hidden bg-black/5">
             <img
-              src="/tamistea/interior.jpg"
-              alt="Inside tamistea cafe"
+              src="/tamistea/toast-tray.jpg"
+              alt="Toast board from tamistea"
               className="absolute inset-0 h-full w-full object-cover"
             />
           </div>
@@ -471,7 +491,7 @@ export function TamisteaLanding() {
 
       <section className="relative px-6 md:px-16 py-20 md:py-28 overflow-hidden">
         <img
-          src="/tamistea/matcha-hand.jpg"
+          src="/tamistea/ube-pudding.jpg"
           alt=""
           className="absolute inset-0 h-full w-full object-cover"
         />
