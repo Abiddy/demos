@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'HomeMine | Chris Jones, Realtor — Sell for Just 1.5%',
+  title: 'Katie Bayliss, Esq. | Bayliss Law — Orange County Attorney & Realtor',
   description:
-    'Get the best price for your home with HomeMine. Sell with Chris Jones, Realtor, for a 1.5% listing fee. Call or text (310) 658-7060.',
+    'Katie Bayliss, Esq. — California attorney and realtor at Bayliss Law. Real estate, probate, trust, business, injury, and criminal matters in Orange County.',
 };
 
 export default function RootLayout({

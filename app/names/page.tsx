@@ -7,7 +7,9 @@ export const metadata: Metadata = {
 };
 
 const SITES = [
-  { href: '/yani', label: 'Yoni Rios', path: '/yani' },
+  { href: '/', label: 'Katie Bayliss', path: '/' },
+  { href: '/e-bikes', label: 'Go E-Bikes', path: '/e-bikes' },
+  { href: '/lesli', label: 'Lesli Koontz', path: '/lesli' },
   { href: '/lesli', label: 'Lesli Koontz', path: '/lesli' },
   { href: '/rudy', label: 'Rudy D. Zuniga', path: '/rudy' },
   { href: '/kay', label: 'Kay Corken', path: '/kay' },

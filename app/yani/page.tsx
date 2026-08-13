@@ -1,16 +1,17 @@
 import type { Metadata } from 'next';
-import { YaniLanding } from '@/components/yani/YaniLanding';
+import { KatieLanding } from '@/components/katie/KatieLanding';
+import '../katie.css';
 
 export const metadata: Metadata = {
-  title: 'Yoni Rios | Foreclosures, Probate & Buying/Selling Homes',
+  title: 'Katie Bayliss, Esq. | Bayliss Law — Orange County Attorney & Realtor',
   description:
-    'Yoni Rios — real estate professional specializing in foreclosures, probate, and buying & selling houses. Connect on Instagram @yonirios07.',
+    'Katie Bayliss, Esq. — California attorney and realtor at Bayliss Law. Real estate, probate, trust, business, injury, and criminal matters in Orange County.',
 };
 
 export default function YaniPage() {
   return (
     <main>
-      <YaniLanding />
+      <KatieLanding />
     </main>
   );
 }

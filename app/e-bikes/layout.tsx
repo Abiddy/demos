@@ -1,4 +1,6 @@
-export default function YaniLayout({
+import './goebikes.css';
+
+export default function GoEbikesLayout({
   children,
 }: {
   children: React.ReactNode;
