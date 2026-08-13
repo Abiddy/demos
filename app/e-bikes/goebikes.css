@@ -29,6 +29,10 @@
   text-decoration: none;
 }
 
+.goe-page a.goe-btn {
+  color: #111;
+}
+
 .goe-shell {
   width: min(100% - 40px, 1280px);
   margin-inline: auto;
