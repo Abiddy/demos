@@ -12,7 +12,6 @@ import {
 const PHONE = '(310) 371-0113';
 const TEL = 'tel:3103710113';
 const SITE = 'http://www.torranceallcaredental.com/';
-const APPOINTMENTS = 'http://www.torranceallcaredental.com/appointments/';
 
 const HERO_IMAGE =
   'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260624_113640_ccf3cf97-d447-425b-a134-d7b09fc743fc.png&w=1280&q=85';
@@ -29,6 +28,45 @@ const SECTION3_IMG2 =
 const SECTION3_BG =
   'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260624_114355_752ba9e6-0942-4abb-9047-5d9bb16632e9.png&w=1280&q=85';
 
+const ABOUT_IMAGE =
+  'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1600&q=80';
+const BOOK_IMAGE =
+  'https://images.unsplash.com/photo-1609840114035-3c981b782dfe?auto=format&fit=crop&w=1600&q=80';
+
+const HOURS = [
+  { day: 'Monday', time: '9:00 am – 6:00 pm' },
+  { day: 'Tuesday', time: '10:00 am – 7:00 pm' },
+  { day: 'Wednesday', time: '9:00 am – 6:00 pm' },
+  { day: 'Thursday', time: '10:00 am – 7:00 pm' },
+  { day: 'Friday', time: '9:00 am – 5:00 pm' },
+  { day: 'Saturday', time: 'Closed' },
+  { day: 'Sunday', time: 'Closed' },
+];
+
+const FAQS = [
+  {
+    q: 'Do you take new patients?',
+    a: 'Yes. Call or book below and we’ll find a time that works for your first visit.',
+  },
+  {
+    q: 'What if I have a dental emergency?',
+    a: 'Call (310) 371-0113. We’ll do our best to see you the same day when we can.',
+  },
+  {
+    q: 'Where is the office?',
+    a: '19019 Hawthorne Blvd, Suite 100-B, Torrance, CA 90503 — just off Hawthorne.',
+  },
+];
+
+const FORM_SERVICES = [
+  'New patient exam',
+  'Cleaning',
+  'Cosmetic consultation',
+  'Implants',
+  'Emergency',
+  'Other',
+];
+
 const featureBars = ['Advanced Dentistry', 'High Quality Equipment', 'Friendly Staff'];
 
 const services = [
@@ -43,9 +81,9 @@ const NAV_LINKS = ['Home', 'Services', 'About', 'Gallery', 'Contact'] as const;
 const NAV_HREFS: Record<(typeof NAV_LINKS)[number], string> = {
   Home: '#home',
   Services: '#services',
-  About: '#home',
+  About: '#about',
   Gallery: '#gallery',
-  Contact: '#contact',
+  Contact: '#book',
 };
 
 type MaskPos = { x: number; y: number; sw: number; sh: number };
@@ -275,7 +313,7 @@ function Navbar() {
         <div className="hidden items-center gap-6 md:flex">
           <a
             href="#gallery"
-            className="rounded-full border border-black bg-white px-6 py-3 text-sm font-semibold transition-colors duration-200 hover:bg-black hover:text-white"
+            className="rounded-full border border-black bg-white px-6 py-3 text-sm font-semibold text-black transition-colors duration-200 hover:bg-black hover:text-white"
           >
             Menu
           </a>
@@ -350,9 +388,8 @@ function Navbar() {
                 Dental Emergency
               </p>
               <a
-                href={APPOINTMENTS}
-                target="_blank"
-                rel="noreferrer"
+                href="#book"
+                onClick={close}
                 className="block w-full rounded-full bg-black px-6 py-4 text-center text-sm font-semibold text-white transition-colors duration-200 hover:bg-neutral-800"
               >
                 Book Appointment
@@ -362,6 +399,111 @@ function Navbar() {
         </div>
       </div>
     </>
+  );
+}
+
+function AppointmentForm() {
+  const [sent, setSent] = useState(false);
+
+  if (sent) {
+    return (
+      <div className="flex min-h-[280px] flex-col justify-between rounded-xl bg-zinc-900 p-5 md:min-h-[360px] md:rounded-2xl md:p-8">
+        <p className="text-xs font-semibold text-white md:text-sm">Request received</p>
+        <h3 className="text-[clamp(2rem,5vw,4.5rem)] font-bold leading-[0.9] text-white">
+          We’ll call
+          <br />
+          you back.
+        </h3>
+        <p className="max-w-md text-sm font-medium text-zinc-400">
+          Thanks — All Care Dental will confirm your appointment at {PHONE}.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form
+      className="h-full rounded-xl bg-zinc-100 p-5 md:rounded-2xl md:p-8"
+      onSubmit={(event) => {
+        event.preventDefault();
+        setSent(true);
+      }}
+    >
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
+        <label className="flex flex-col gap-1.5">
+          <span className="text-xs font-semibold text-black">Full name</span>
+          <input
+            required
+            name="name"
+            autoComplete="name"
+            className="rounded-xl bg-white px-4 py-3 text-sm font-medium text-black outline-none"
+            placeholder="Jane Rivera"
+          />
+        </label>
+        <label className="flex flex-col gap-1.5">
+          <span className="text-xs font-semibold text-black">Phone</span>
+          <input
+            required
+            name="phone"
+            type="tel"
+            autoComplete="tel"
+            className="rounded-xl bg-white px-4 py-3 text-sm font-medium text-black outline-none"
+            placeholder="(310) 000-0000"
+          />
+        </label>
+        <label className="flex flex-col gap-1.5">
+          <span className="text-xs font-semibold text-black">Email</span>
+          <input
+            required
+            name="email"
+            type="email"
+            autoComplete="email"
+            className="rounded-xl bg-white px-4 py-3 text-sm font-medium text-black outline-none"
+            placeholder="you@email.com"
+          />
+        </label>
+        <label className="flex flex-col gap-1.5">
+          <span className="text-xs font-semibold text-black">Preferred date</span>
+          <input
+            name="date"
+            type="date"
+            className="rounded-xl bg-white px-4 py-3 text-sm font-medium text-black outline-none"
+          />
+        </label>
+        <label className="flex flex-col gap-1.5 md:col-span-2">
+          <span className="text-xs font-semibold text-black">Reason for visit</span>
+          <select
+            name="service"
+            defaultValue="New patient exam"
+            className="rounded-xl bg-white px-4 py-3 text-sm font-medium text-black outline-none"
+          >
+            {FORM_SERVICES.map((option) => (
+              <option key={option}>{option}</option>
+            ))}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1.5 md:col-span-2">
+          <span className="text-xs font-semibold text-black">Notes</span>
+          <textarea
+            name="notes"
+            rows={4}
+            className="resize-none rounded-xl bg-white px-4 py-3 text-sm font-medium text-black outline-none"
+            placeholder="Anything we should know before your visit?"
+          />
+        </label>
+      </div>
+      <div className="mt-5 flex flex-col gap-3 md:mt-6 md:flex-row md:items-center md:justify-between">
+        <p className="text-xs font-semibold text-black md:text-sm">
+          Or call {PHONE} · 19019 Hawthorne Blvd, Suite 100-B
+        </p>
+        <button
+          type="submit"
+          className="rounded-full bg-blue-600 px-8 py-4 text-base font-bold text-white transition-transform hover:scale-105 md:px-10 md:py-5 md:text-xl"
+        >
+          Book Appointment
+        </button>
+      </div>
+    </form>
   );
 }
 
@@ -377,6 +519,9 @@ export function DentalLanding() {
   const s1Reveal = useStaggeredReveal(4);
   const s2Reveal = useStaggeredReveal(4);
   const s3Reveal = useStaggeredReveal(4);
+  const s4Reveal = useStaggeredReveal(2);
+  const s5Reveal = useStaggeredReveal(1);
+  const s6Reveal = useStaggeredReveal(2);
 
   const s1Pos = useMaskPositions(section1Ref, s1Cards);
   const s2Pos = useMaskPositions(section2Ref, s2Cards);
@@ -396,7 +541,7 @@ export function DentalLanding() {
 
   return (
     <div
-      className="min-h-screen bg-white"
+      className="min-h-screen bg-white text-black"
       style={{
         fontFamily:
           "'Open Sauce One', -apple-system, BlinkMacSystemFont, sans-serif",
@@ -459,8 +604,8 @@ export function DentalLanding() {
             </h1>
           </div>
           <a
-            href={TEL}
-            className="absolute right-4 bottom-6 z-10 text-xs font-semibold text-white md:right-8 md:bottom-10 md:text-sm"
+            href="#book"
+            className="absolute right-3 bottom-4 z-10 whitespace-nowrap rounded-full bg-white px-4 py-2.5 text-xs font-bold text-black transition-transform hover:scale-105 md:right-8 md:bottom-10 md:px-6 md:py-3 md:text-sm"
           >
             Free Consultation
           </a>
@@ -473,7 +618,7 @@ export function DentalLanding() {
           section2Ref.current = el;
           s2Reveal.containerRef.current = el;
         }}
-        className="flex min-h-screen w-full flex-col overflow-hidden gap-1.5 px-3 pt-1.5 pb-1.5 md:h-screen md:gap-2 md:px-5 md:pt-2 md:pb-2"
+        className="flex min-h-screen w-full flex-col gap-1.5 px-3 pt-1.5 pb-1.5 md:gap-2 md:px-5 md:pt-2 md:pb-2"
       >
         <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-[auto_auto_auto_auto] gap-1.5 md:grid-cols-2 md:grid-rows-[1fr_1fr_0.8fr] md:gap-2">
           <MaskedCard
@@ -577,16 +722,16 @@ export function DentalLanding() {
       </section>
 
       <section
-        id="contact"
+        id="implants"
         ref={(el) => {
           s3Reveal.containerRef.current = el;
         }}
-        className="flex min-h-screen w-full flex-col overflow-hidden gap-1.5 px-3 pt-1.5 pb-1.5 md:h-screen md:gap-2 md:px-5 md:pt-2 md:pb-2"
+        className="flex min-h-screen w-full flex-col gap-1.5 px-3 pt-1.5 pb-1.5 md:gap-2 md:px-5 md:pt-2 md:pb-2"
       >
         <div className="grid min-h-0 flex-1 grid-cols-1 gap-1.5 md:grid-cols-2 md:gap-2">
           <div className="flex flex-col gap-1.5 md:gap-2">
             <div
-              className="flex min-h-[180px] flex-[1.2] flex-col justify-between rounded-xl bg-stone-50 p-5 md:min-h-0 md:rounded-2xl md:p-7"
+              className="flex min-h-[200px] shrink-0 flex-col justify-between rounded-xl bg-sky-300 p-5 md:rounded-2xl md:p-7"
               style={s3Reveal.getAnimStyle(0)}
             >
               <h2 className="text-[clamp(3rem,7vw,6.5rem)] font-bold leading-[0.95] text-black">
@@ -620,14 +765,14 @@ export function DentalLanding() {
             </div>
 
             <div
-              className="flex min-h-[160px] flex-[0.8] items-end justify-between rounded-xl bg-zinc-200 p-5 md:min-h-0 md:rounded-2xl md:p-7"
+              className="flex shrink-0 flex-col justify-between gap-4 rounded-xl bg-zinc-900 p-5 sm:flex-row sm:items-end md:rounded-2xl md:p-7"
               style={s3Reveal.getAnimStyle(2)}
             >
               <div>
-                <p className="mb-2 text-xs font-semibold text-black md:mb-3 md:text-sm">
+                <p className="mb-2 text-xs font-semibold text-white md:mb-3 md:text-sm">
                   Consultation
                 </p>
-                <h3 className="text-xl font-bold leading-6 text-black md:text-3xl md:leading-8">
+                <h3 className="text-xl font-bold leading-6 text-white md:text-3xl md:leading-8">
                   Dental
                   <br />
                   Restoration
@@ -636,10 +781,8 @@ export function DentalLanding() {
                 </h3>
               </div>
               <a
-                href={APPOINTMENTS}
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-full bg-white px-5 py-3 text-base font-bold text-black transition-transform hover:scale-105 md:px-8 md:py-5 md:text-xl"
+                href="#book"
+                className="rounded-full bg-blue-600 px-5 py-3 text-base font-bold text-white transition-transform hover:scale-105 md:px-8 md:py-5 md:text-xl"
               >
                 Book Online
               </a>
@@ -656,15 +799,15 @@ export function DentalLanding() {
               className="h-full w-full object-cover"
             />
             <div className="absolute right-3 bottom-3 left-3 flex gap-1.5 md:right-5 md:bottom-5 md:left-5 md:gap-2">
-              <div className="flex h-36 flex-1 flex-col justify-between rounded-xl bg-white p-3 md:h-52 md:rounded-2xl md:p-5">
-                <h4 className="text-lg font-bold leading-5 text-black md:text-2xl md:leading-7">
+              <div className="flex min-h-[9rem] flex-1 flex-col justify-between rounded-xl bg-zinc-900 p-3 md:min-h-[13rem] md:rounded-2xl md:p-5">
+                <h4 className="text-lg font-bold leading-5 text-white md:text-2xl md:leading-7">
                   The Process
                   <br />
                   of Installing
                   <br />
                   Implants
                 </h4>
-                <span className="flex h-9 w-9 items-center justify-center self-end rounded-full border border-black md:h-12 md:w-12">
+                <span className="flex h-9 w-9 items-center justify-center self-end rounded-full border border-white text-white md:h-12 md:w-12">
                   <ArrowIcon className="rotate-[-45deg]" />
                 </span>
               </div>
@@ -672,7 +815,7 @@ export function DentalLanding() {
                 href={SITE}
                 target="_blank"
                 rel="noreferrer"
-                className="flex h-36 flex-1 flex-col justify-between rounded-xl bg-white/20 p-3 backdrop-blur-xl md:h-52 md:rounded-2xl md:p-5"
+                className="flex min-h-[9rem] flex-1 flex-col justify-between rounded-xl bg-blue-600/85 p-3 backdrop-blur-xl md:min-h-[13rem] md:rounded-2xl md:p-5"
               >
                 <h4 className="text-lg font-bold leading-5 text-white md:text-2xl md:leading-7">
                   Caring
@@ -689,6 +832,167 @@ export function DentalLanding() {
           </div>
         </div>
       </section>
+
+      <section
+        id="about"
+        ref={(el) => {
+          s4Reveal.containerRef.current = el;
+        }}
+        className="flex min-h-screen w-full flex-col gap-1.5 px-3 pt-1.5 pb-1.5 md:gap-2 md:px-5 md:pt-2 md:pb-2"
+      >
+        <div className="grid min-h-0 flex-1 grid-cols-1 gap-1.5 md:grid-cols-2 md:gap-2">
+          <div
+            className="relative min-h-[320px] overflow-hidden rounded-xl md:min-h-0 md:rounded-2xl"
+            style={s4Reveal.getAnimStyle(0)}
+          >
+            <img
+              src={ABOUT_IMAGE}
+              alt="All Care Dental treatment room"
+              className="h-full w-full object-cover"
+            />
+          </div>
+          <div className="flex flex-col gap-1.5 md:gap-2">
+            <div
+              className="flex shrink-0 flex-col justify-between gap-6 rounded-xl bg-sky-300 p-5 md:rounded-2xl md:p-7"
+              style={s4Reveal.getAnimStyle(1)}
+            >
+              <p className="text-xs font-semibold text-black md:text-sm">
+                About the practice
+              </p>
+              <h2 className="text-[clamp(2.5rem,6vw,5.5rem)] font-bold leading-[0.9] text-black">
+                Care for
+                <br />
+                every smile.
+              </h2>
+              <p className="max-w-md text-sm font-medium leading-5 text-neutral-800 md:text-base md:leading-6">
+                Cosmetic, general, oral surgery, and periodontics in Torrance —
+                exams, x-rays, fillings, root canals, and implants.
+              </p>
+            </div>
+            <div className="grid shrink-0 grid-cols-1 gap-1.5 md:grid-cols-2 md:gap-2">
+              <div className="rounded-xl bg-zinc-900 p-5 md:rounded-2xl md:p-6">
+                <p className="mb-3 text-xs font-semibold text-white md:text-sm">Hours</p>
+                <ul className="space-y-1">
+                  {HOURS.map((row) => (
+                    <li
+                      key={row.day}
+                      className="flex items-baseline justify-between gap-3 text-xs font-semibold text-white md:text-sm"
+                    >
+                      <span>{row.day.slice(0, 3)}</span>
+                      <span className="font-medium text-zinc-400">{row.time}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <a
+                href="https://maps.google.com/?q=19019+Hawthorne+Blvd+Suite+100-B+Torrance+CA+90503"
+                target="_blank"
+                rel="noreferrer"
+                className="flex flex-col justify-between rounded-xl bg-blue-600 p-5 md:rounded-2xl md:p-6"
+              >
+                <p className="text-xs font-semibold text-white md:text-sm">Visit us</p>
+                <p className="text-lg font-bold leading-6 text-white md:text-2xl md:leading-7">
+                  19019 Hawthorne Blvd
+                  <br />
+                  Suite 100-B
+                  <br />
+                  Torrance, CA 90503
+                </p>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        ref={(el) => {
+          s5Reveal.containerRef.current = el;
+        }}
+        className="flex w-full flex-col px-3 pt-1.5 pb-1.5 md:px-5 md:pt-2 md:pb-2"
+      >
+        <div
+          className="relative min-h-[420px] overflow-hidden rounded-xl md:min-h-[480px] md:rounded-2xl"
+          style={s5Reveal.getAnimStyle(0)}
+        >
+          <img
+            src={SECTION2_IMAGE}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/20" />
+          <div className="relative z-10 flex h-full flex-col justify-between gap-8 p-2 md:p-3">
+            <div className="relative overflow-hidden rounded-xl bg-white/20 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] backdrop-blur-xl md:rounded-2xl md:p-8">
+              <div
+                className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/40 via-white/5 to-transparent"
+                aria-hidden
+              />
+              <h2 className="relative text-[clamp(2.5rem,6vw,5rem)] font-bold leading-[0.9] text-white">
+                Questions
+              </h2>
+              <div className="relative mt-8 grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
+                {FAQS.map((item) => (
+                  <div key={item.q}>
+                    <h3 className="text-lg font-bold text-white md:text-xl">
+                      {item.q}
+                    </h3>
+                    <p className="mt-2 text-sm font-medium leading-5 text-white/80">
+                      {item.a}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="book"
+        ref={(el) => {
+          s6Reveal.containerRef.current = el;
+        }}
+        className="flex w-full flex-col gap-1.5 px-3 pt-1.5 pb-1.5 md:min-h-[80vh] md:gap-2 md:px-5 md:pt-2 md:pb-2"
+      >
+        <div className="grid min-h-0 flex-1 grid-cols-1 gap-1.5 md:grid-cols-2 md:gap-2">
+          <div
+            className="relative min-h-[280px] overflow-hidden rounded-xl md:min-h-[520px] md:rounded-2xl"
+            style={s6Reveal.getAnimStyle(0)}
+          >
+            <img
+              src={BOOK_IMAGE}
+              alt="Healthy smile"
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/55 to-transparent p-5 md:p-8">
+              <p className="mb-2 text-xs font-semibold text-white md:text-sm">
+                New patients welcome
+              </p>
+              <h2 className="text-[clamp(2.5rem,6vw,5rem)] font-bold leading-[0.9] text-white">
+                Book an
+                <br />
+                Appointment
+              </h2>
+              <a
+                href={TEL}
+                className="mt-5 w-fit rounded-full bg-white px-5 py-3 text-sm font-bold text-black transition-transform hover:scale-105 md:px-7 md:py-4 md:text-base"
+              >
+                Call {PHONE}
+              </a>
+            </div>
+          </div>
+          <div className="h-full" style={s6Reveal.getAnimStyle(1)}>
+            <AppointmentForm />
+          </div>
+        </div>
+      </section>
+
+      <footer className="flex flex-col gap-3 px-3 py-6 text-xs font-semibold text-neutral-500 md:flex-row md:items-center md:justify-between md:px-5 md:py-8 md:text-sm">
+        <span>© {new Date().getFullYear()} All Care Dental</span>
+        <span>19019 Hawthorne Blvd, Suite 100-B · Torrance, CA 90503</span>
+        <a href={TEL} className="text-black">
+          {PHONE}
+        </a>
+      </footer>
     </div>
   );
 }
