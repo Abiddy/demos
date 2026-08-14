@@ -18,8 +18,8 @@ const SITE = 'https://goebikes.net/';
 const MAPS =
   'https://maps.google.com/?q=18831+Hawthorne+Blvd,+Torrance,+CA+90504';
 
-const HERO =
-  'https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=2200&q=80';
+const HERO = '/ebikes/hero.png?v=2';
+const HERO_VIDEO = '/ebikes/hero.mov';
 const RIDE_A =
   'https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=1200&q=80';
 const RIDE_B =
@@ -196,11 +196,17 @@ export function GoEbikesLanding() {
         ) : null}
       </header>
 
-      <section
-        className="goe-hero"
-        id="top"
-        style={{ backgroundImage: `url(${HERO})` }}
-      >
+      <section className="goe-hero" id="top">
+        <video
+          className="goe-hero-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster={HERO}
+        >
+          <source src={HERO_VIDEO} />
+        </video>
         <div className="goe-hero-scrim" />
         <div className="goe-hero-copy">
           <p className="goe-kicker">South Bay electric since 2020</p>
