@@ -1,30 +1,38 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useRef, useState, type CSSProperties, type FormEvent } from 'react';
 import {
-  ArrowRight,
-  FileText,
-  Landmark,
-  Scale,
-  Shield,
-  X,
-} from 'lucide-react';
+  motion,
+  useInView,
+  useScroll,
+  useTransform,
+  type MotionValue,
+} from 'framer-motion';
+import { ArrowRight, Check } from 'lucide-react';
 
-const INSTAGRAM_URL = 'https://www.instagram.com/katiebattorney/';
-const REAL_ESTATE_IG = 'https://www.instagram.com/katiebsellscali/';
 const PHONE = '(714) 514-0005';
-const PHONE_HREF = 'tel:7145140005';
+const TEL = 'tel:7145140005';
 const ADDRESS = '25 Mauchly, Suite 321, Irvine, CA 92618';
+const INSTAGRAM = 'https://www.instagram.com/katiebattorney/';
+const REAL_ESTATE_IG = 'https://www.instagram.com/katiebsellscali/';
+const BESTIE_IG = 'https://www.instagram.com/katieb_yourrealbestie/';
+const INK = '#E1E0CC';
+const CREAM = '#DEDBC8';
+const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const CARD_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const HEADSHOT = '/katie/katie-headshot.png';
 const PORTRAIT = '/katie/katie-portrait.png';
 const STUDIO = '/katie/katie-studio.png';
+const HERO_PHOTO = '/katie/katie-hero.png';
+const COVER = '/katie/katie-cover.png';
 
-const NAV_LINKS = [
+const NAV = [
+  { label: 'Our story', href: '#about' },
   { label: 'Practice', href: '#practice' },
-  { label: 'About', href: '#about' },
+  { label: 'How it works', href: '#steps' },
   { label: 'FAQ', href: '#faq' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Inquiries', href: '#contact' },
 ] as const;
 
 const TRUST_MARKS = [
@@ -38,54 +46,75 @@ const TRUST_MARKS = [
   'California Bar',
 ] as const;
 
-const MATTERS = [
-  'Real Estate',
-  'Probate / Trust',
-  'Business',
-  'Injury',
-  'Criminal',
+const ABOUT_COPY =
+  'Over the last sixteen years, I have practiced as a California attorney and realtor from Irvine. At Bayliss Law, families and investors get contract review, negotiation, and the transaction in one conversation — without assembling a second team.';
+
+const TRIO = [
+  {
+    title: 'Based in OC',
+    body: 'Irvine office. Clients across Orange County — Newport, Costa Mesa, Tustin, and surrounding cities.',
+  },
+  {
+    title: 'Tuned for the closing',
+    body: 'Attorney and realtor in the same engagement, so the deal and the documents do not live in two inboxes.',
+  },
+  {
+    title: 'One person at the table',
+    body: 'You are not translating between a listing agent and outside counsel. Katie already knows the file.',
+  },
 ] as const;
 
 const PRACTICES = [
   {
     title: 'Real Estate',
     body: 'Buy, sell, and negotiate residential or commercial property with contract review in the same conversation — no second hire.',
-    image:
-      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1400&q=85',
-    badge: 'Purchase agreement',
-    count: 'In-house review',
   },
   {
     title: 'Probate & Trust',
     body: 'Guided estate and probate sales for families who need a clean close, clear title, and someone who can speak both real estate and the court.',
-    image:
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=85',
-    badge: 'Estate administration',
-    count: 'Family-first close',
   },
   {
     title: 'Business',
     body: 'Entity work, contracts, and commercial deals for operators who want counsel that also understands the property underneath the business.',
-    image:
-      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1400&q=85',
-    badge: 'Operating agreements',
-    count: 'Deal + documents',
   },
   {
     title: 'Injury',
     body: 'Personal injury representation with the same direct communication clients get on a closing — clear next steps, no runaround.',
-    image:
-      'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1400&q=85',
-    badge: 'Client advocacy',
-    count: 'Direct counsel',
   },
   {
     title: 'Criminal',
     body: 'Criminal defense that treats you like a person, not a file number. Straightforward advice from the first call.',
-    image:
-      'https://images.unsplash.com/photo-1589829545858-2a211024817a?auto=format&fit=crop&w=1400&q=85',
-    badge: 'Defense strategy',
-    count: 'First conversation',
+  },
+] as const;
+
+const FEATURE_CARDS = [
+  {
+    num: '01',
+    title: 'Real Estate Closings.',
+    items: [
+      'Purchase agreements reviewed in-house',
+      'Negotiation without a second hire',
+      'Listing through signatures',
+      'Contract language in plain English',
+    ],
+  },
+  {
+    num: '02',
+    title: 'Probate & Trust.',
+    items: [
+      'Estate and probate sales for families',
+      'Clear title through the court process',
+      'Counsel who speaks both markets and the file',
+    ],
+  },
+  {
+    num: '03',
+    title: 'Direct Counsel.',
+    items: [
+      'Business, injury, and criminal matters',
+      'A 25-minute first conversation',
+      'Orange County based — Irvine office',
+    ],
   },
 ] as const;
 
@@ -148,599 +177,617 @@ const FAQS = [
   },
 ] as const;
 
-type FormState = {
-  name: string;
-  email: string;
-  matter: string;
-};
+const MATTERS = [
+  'Real Estate',
+  'Probate / Trust',
+  'Business',
+  'Injury',
+  'Criminal',
+] as const;
 
-const EMPTY_FORM: FormState = {
-  name: '',
-  email: '',
-  matter: MATTERS[0],
-};
-
-export function KatieLanding() {
-  const [navDark, setNavDark] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [practiceIndex, setPracticeIndex] = useState(0);
-  const [faqIndex, setFaqIndex] = useState<number | null>(0);
-  const [closeForm, setCloseForm] = useState<FormState>(EMPTY_FORM);
-  const [closeSent, setCloseSent] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const light = document.getElementById('kb-light');
-      if (!light) return;
-      setNavDark(window.scrollY > light.offsetHeight - 72);
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  const activePractice = PRACTICES[practiceIndex];
+function WordsPullUp({
+  text,
+  className,
+  showAsterisk,
+  style,
+}: {
+  text: string;
+  className?: string;
+  showAsterisk?: boolean;
+  style?: CSSProperties;
+}) {
+  const ref = useRef<HTMLHeadingElement>(null);
+  const inView = useInView(ref, { once: true });
+  const words = text.split(' ');
 
   return (
-    <div className="kb-page">
-      <header className={`kb-nav${navDark ? ' is-dark' : ''}`}>
-        <div className="kb-shell kb-nav-inner">
-          <a href="#top" className="kb-logo" aria-label="Bayliss Law">
-            <span className="kb-logo-mark" aria-hidden />
-            <span className="kb-logo-word">Bayliss</span>
-          </a>
+    <h1 ref={ref} className={className} style={style}>
+      {words.map((word, i) => (
+        <span
+          key={`${word}-${i}`}
+          className={`inline-block ${
+            showAsterisk && i === words.length - 1 ? 'overflow-visible pr-[0.35em]' : 'overflow-hidden'
+          }`}
+        >
+          <motion.span
+            className="relative inline-block"
+            initial={{ y: 20, opacity: 0 }}
+            animate={inView ? { y: 0, opacity: 1 } : undefined}
+            transition={{ delay: i * 0.08, duration: 0.7, ease: EASE }}
+          >
+            {word}
+            {showAsterisk && i === words.length - 1 ? (
+              <span className="absolute top-[0.65em] -right-[0.3em] text-[0.31em]">
+                *
+              </span>
+            ) : null}
+            {i < words.length - 1 ? '\u00a0' : null}
+          </motion.span>
+        </span>
+      ))}
+    </h1>
+  );
+}
 
-          <nav className="kb-nav-links" aria-label="Primary">
-            {NAV_LINKS.map((link) => (
-              <a key={link.href} href={link.href}>
+function WordsPullUpMultiStyle({
+  segments,
+  className,
+  style,
+}: {
+  segments: { text: string; className?: string }[];
+  className?: string;
+  style?: CSSProperties;
+}) {
+  const ref = useRef<HTMLHeadingElement>(null);
+  const inView = useInView(ref, { once: true });
+  const words = segments.flatMap((segment) =>
+    segment.text
+      .split(' ')
+      .filter(Boolean)
+      .map((word) => ({ word, className: segment.className }))
+  );
+
+  return (
+    <h2
+      ref={ref}
+      className={`inline-flex flex-wrap justify-center ${className ?? ''}`}
+      style={style}
+    >
+      {words.map((item, i) => (
+        <span key={`${item.word}-${i}`} className="inline-block overflow-hidden">
+          <motion.span
+            className={`inline-block ${item.className ?? ''}`}
+            initial={{ y: 20, opacity: 0 }}
+            animate={inView ? { y: 0, opacity: 1 } : undefined}
+            transition={{ delay: i * 0.08, duration: 0.7, ease: EASE }}
+          >
+            {item.word}
+            {i < words.length - 1 ? '\u00a0' : null}
+          </motion.span>
+        </span>
+      ))}
+    </h2>
+  );
+}
+
+function AnimatedLetter({
+  children,
+  index,
+  total,
+  progress,
+}: {
+  children: string;
+  index: number;
+  total: number;
+  progress: MotionValue<number>;
+}) {
+  const charProgress = index / total;
+  const opacity = useTransform(
+    progress,
+    [charProgress - 0.1, charProgress + 0.05],
+    [0.2, 1]
+  );
+  return <motion.span style={{ opacity }}>{children}</motion.span>;
+}
+
+function AboutBody({ text }: { text: string }) {
+  const ref = useRef<HTMLParagraphElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start 0.8', 'end 0.2'],
+  });
+  const chars = Array.from(text);
+
+  return (
+    <p
+      ref={ref}
+      className="mx-auto mt-10 max-w-2xl text-xs sm:text-sm md:text-base"
+      style={{ color: CREAM }}
+    >
+      {chars.map((char, i) => (
+        <AnimatedLetter
+          key={`${char}-${i}`}
+          index={i}
+          total={chars.length}
+          progress={scrollYProgress}
+        >
+          {char}
+        </AnimatedLetter>
+      ))}
+    </p>
+  );
+}
+
+function CreamButton({
+  href,
+  children,
+}: {
+  href: string;
+  children: string;
+}) {
+  return (
+    <a
+      href={href}
+      className="group inline-flex w-fit items-center gap-2 rounded-full py-1.5 pr-1.5 pl-5 transition-all hover:gap-3"
+      style={{ backgroundColor: CREAM }}
+    >
+      <span className="text-sm font-medium text-black sm:text-base">
+        {children}
+      </span>
+      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black transition-transform group-hover:scale-110 sm:h-10 sm:w-10">
+        <ArrowRight size={16} style={{ color: CREAM }} />
+      </span>
+    </a>
+  );
+}
+
+export function KatieLanding() {
+  const featuresRef = useRef<HTMLDivElement>(null);
+  const featuresInView = useInView(featuresRef, { once: true, margin: '-100px' });
+  const [faqIndex, setFaqIndex] = useState<number | null>(0);
+  const [sent, setSent] = useState(false);
+
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSent(true);
+  };
+
+  return (
+    <div className="kb-page bg-black">
+      <section className="h-screen bg-black p-4 md:p-6" id="top">
+        <div className="relative h-full overflow-hidden rounded-2xl bg-black md:rounded-[2rem]">
+          <img
+            src={COVER}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-black/70" />
+          <nav className="absolute top-0 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 rounded-b-2xl bg-black px-4 py-2 sm:gap-6 md:gap-12 md:rounded-b-3xl md:px-8 lg:gap-14">
+            {NAV.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="whitespace-nowrap text-[10px] font-medium sm:text-xs md:text-sm"
+                style={{ color: 'rgba(225, 224, 204, 0.8)' }}
+              >
                 {link.label}
               </a>
             ))}
           </nav>
 
-          <div className="kb-nav-end">
-            <a className="kb-nav-text" href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
-              Instagram
-            </a>
-            <button
-              type="button"
-              className="kb-nav-toggle"
-              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={menuOpen}
-              onClick={() => setMenuOpen((open) => !open)}
-            >
-              {menuOpen ? <X size={22} strokeWidth={1.5} /> : (
-                <span aria-hidden style={{ fontSize: 22, lineHeight: 1 }}>☰</span>
-              )}
-            </button>
+          <div className="absolute right-0 bottom-0 left-0 z-10 p-4 md:p-8">
+            <p className="mb-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <span
+                className="text-2xl font-medium tracking-tight sm:text-4xl md:text-5xl lg:text-6xl"
+                style={{ color: CREAM }}
+              >
+                Attorney & realtor
+              </span>
+              <span
+                className="text-[10px] font-medium tracking-[0.18em] uppercase sm:text-xs"
+                style={{ color: CREAM }}
+              >
+                Irvine
+              </span>
+            </p>
+            <WordsPullUp
+              text="Bayliss"
+              showAsterisk
+              className="block w-full pr-[0.4em] text-[18vw] font-medium leading-[0.85] tracking-[-0.07em] sm:text-[16vw] md:text-[15vw] lg:text-[14vw] xl:text-[13vw]"
+              style={{ color: INK }}
+            />
+            <div className="mt-4 max-w-xl lg:ml-auto">
+              <motion.p
+                className="text-base sm:text-lg md:text-xl lg:text-2xl"
+                style={{ color: 'rgba(222, 219, 200, 0.88)', lineHeight: 1.35 }}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.7, ease: EASE }}
+              >
+                Stop hiring a realtor and a lawyer for the same closing. Katie
+                Bayliss, Esq. is a California attorney and realtor — real
+                estate, probate, trust, business, injury, and criminal matters
+                in Orange County.
+              </motion.p>
+              <motion.div
+                className="mt-5"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.7, duration: 0.7, ease: EASE }}
+              >
+                <CreamButton href="#contact">Book a consult</CreamButton>
+              </motion.div>
+            </div>
           </div>
         </div>
-        {menuOpen ? (
-          <div className="kb-shell kb-mobile-menu">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setMenuOpen(false)}
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-        ) : null}
-      </header>
+      </section>
 
-      <div id="kb-light" className="kb-light">
-        <section className="kb-hero" id="top">
-          <div className="kb-shell kb-hero-copy">
-            <p className="kb-kicker">Katie Bayliss, Esq. · Orange County</p>
-            <h1 className="kb-display kb-hero-title">
-              Stop hiring a realtor and a lawyer for{' '}
-              <em>the same closing.</em>
-            </h1>
-            <p className="kb-hero-sub">
-              Attorney and realtor at Bayliss Law. Real estate, probate, trust,
-              business, injury, and criminal matters — from Irvine, across
-              Orange County.
-            </p>
-          </div>
-        </section>
-
-        <section className="kb-shell kb-story-wrap" aria-label="About Katie">
-          <article className="kb-story">
-            <div className="kb-story-copy">
-              <p className="kb-story-brand">Bayliss</p>
-              <blockquote className="kb-story-quote">
-                The deal and the documents run through one person — so you are
-                not only faster, you actually{' '}
-                <strong>close with counsel at the table.</strong>
-              </blockquote>
-              <p className="kb-story-by">
-                <strong>Katie Bayliss, Esq.</strong>
-                Bayliss Law · Orange County
-              </p>
-            </div>
-            <div className="kb-story-media">
-              <img
-                src={STUDIO}
-                alt="Katie Bayliss, Esq., attorney and realtor"
-              />
-            </div>
-          </article>
-        </section>
-
-        <section className="kb-trust" aria-label="Practice areas">
-          <div className="kb-marquee" aria-hidden="true">
-            <div className="kb-marquee-track">
-              {[0, 1].map((copy) => (
-                <div key={copy} className="kb-marquee-set">
-                  {TRUST_MARKS.map((mark) => (
-                    <span key={`${copy}-${mark}`} className="kb-trust-item">
-                      {mark}
-                    </span>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+      <div className="overflow-hidden border-y border-white/10 py-4" aria-label="Practice areas">
+        <div className="kb-marquee">
+          {[...TRUST_MARKS, ...TRUST_MARKS].map((mark, i) => (
+            <span
+              key={`${mark}-${i}`}
+              className="px-8 text-sm font-medium tracking-[0.14em] uppercase"
+              style={{ color: CREAM }}
+            >
+              {mark} ·
+            </span>
+          ))}
+        </div>
       </div>
 
-      <div className="kb-dark">
-        <section className="kb-shell kb-split-intro" id="about">
-          <p className="kb-kicker">
-            Handle routine closings with speed — and keep counsel for the
-            matters that actually need it.
-          </p>
-          <h2 className="kb-display kb-split-title">
-            Reserve the extra legal budget for problems that are not a standard
-            Orange County sale.
-          </h2>
-        </section>
-
-        <section className="kb-shell kb-trio" aria-label="Why Bayliss">
-          <article className="kb-trio-item">
-            <div className="kb-trio-icon" aria-hidden>
-              <svg viewBox="0 0 52 52" fill="none">
-                <circle cx="26" cy="26" r="26" fill="#1FA971" />
-                <path
-                  d="M26 12.5c-6.1 0-11 4.7-11 10.9 0 8.2 11 16.1 11 16.1s11-7.9 11-16.1c0-6.2-4.9-10.9-11-10.9Z"
-                  stroke="#fff"
-                  strokeWidth="1.7"
-                />
-                <circle cx="26" cy="23.2" r="3.4" stroke="#fff" strokeWidth="1.7" />
-              </svg>
-            </div>
-            <h3>Based in Orange County</h3>
-            <p>
-              Irvine office, closings from Newport to Tustin. California Bar,
-              local files, no out-of-state runaround.
+      <section className="bg-black px-4 py-10 md:px-6" aria-label="About Katie">
+        <article className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#101010] md:grid-cols-2">
+          <div className="flex flex-col justify-between p-8 md:p-12">
+            <p className="text-xs font-medium tracking-[0.16em] uppercase" style={{ color: CREAM }}>
+              Bayliss
             </p>
-          </article>
-
-          <article className="kb-trio-item">
-            <div className="kb-trio-icon" aria-hidden>
-              <svg viewBox="0 0 52 52" fill="none">
-                <circle cx="26" cy="26" r="26" fill="#F94D1E" />
-                <circle cx="26" cy="26" r="11.5" stroke="#fff" strokeWidth="1.7" />
-                <circle cx="26" cy="26" r="6.5" stroke="#fff" strokeWidth="1.7" />
-                <circle cx="26" cy="26" r="2.2" fill="#fff" />
-              </svg>
-            </div>
-            <h3>Tuned for the closing</h3>
-            <p>
-              Purchase agreements, probate sales, and business deals — read as a
-              lawyer, priced as a broker.
+            <blockquote
+              className="kb-serif mt-10 text-3xl leading-[1.05] italic md:text-4xl lg:text-5xl"
+              style={{ color: INK }}
+            >
+              The deal and the documents run through one person — so you are not
+              only faster, you actually close with counsel at the table.
+            </blockquote>
+            <p className="mt-8 text-sm text-gray-400">
+              Katie Bayliss, Esq. · Bayliss Law · California Bar since 2010
             </p>
-          </article>
-
-          <article className="kb-trio-item">
-            <div className="kb-trio-icon" aria-hidden>
-              <svg viewBox="0 0 52 52" fill="none">
-                <circle cx="26" cy="26" r="26" fill="#029CFF" />
-                <rect
-                  x="14"
-                  y="16"
-                  width="16"
-                  height="16"
-                  rx="2.5"
-                  stroke="#fff"
-                  strokeWidth="1.7"
-                />
-                <rect
-                  x="22"
-                  y="20"
-                  width="16"
-                  height="16"
-                  rx="2.5"
-                  stroke="#fff"
-                  strokeWidth="1.7"
-                />
-                <path
-                  d="M31 28.5h5.5M34.5 25.5 38 28.5l-3.5 3"
-                  stroke="#fff"
-                  strokeWidth="1.7"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <h3>One person at the table</h3>
-            <p>
-              Contract review happens in the same conversation as the listing.
-              No copy-paste between a realtor and counsel.
-            </p>
-          </article>
-        </section>
-
-        <section className="kb-section kb-shell">
-          <div className="kb-cyan">
-            <div className="kb-ask" aria-hidden>
-              <div className="kb-ask-bar">
-                Purchase Agreement
-                <span>Notes</span>
-              </div>
-              <div className="kb-ask-body">
-                <div className="kb-ask-doc">
-                  <p>
-                    Buyer shall deposit earnest money within{' '}
-                    <span className="kb-mark">three (3) business days</span> of
-                    acceptance.
-                  </p>
-                  <p>
-                    Inspection contingency expires on{' '}
-                    <span className="kb-mark">Day 17</span>. Seller to deliver
-                    TDS, SPQ, and NHD prior to close.
-                  </p>
-                  <p>
-                    Close of escrow shall occur on or before{' '}
-                    <span className="kb-mark">30 days</span> from acceptance.
-                  </p>
-                </div>
-                <div className="kb-ask-side">
-                  <div className="kb-ask-tabs">
-                    <span className="kb-ask-tab is-on">Review</span>
-                    <span className="kb-ask-tab">Notes</span>
-                    <span className="kb-ask-tab">Dates</span>
-                  </div>
-                  <p className="kb-ask-note">
-                    Earnest money in 3 days is tight for a wire. Ask for 5.
-                  </p>
-                  <p className="kb-ask-note">
-                    Inspection: push to Day 21 before removing the contingency.
-                  </p>
-                  <div className="kb-ask-input">
-                    <p>Ask about this clause…</p>
-                    <div className="kb-ask-input-foot">
-                      <span className="kb-ask-chip">Full document ▾</span>
-                      <span className="kb-ask-send">
-                        <ArrowRight size={14} strokeWidth={2.2} />
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="kb-cyan-copy">
-              <h2>Counsel you can trust, on the contract.</h2>
-              <a className="kb-cyan-link" href="#practice">
-                More on real estate
-                <ArrowRight size={16} strokeWidth={2} />
-              </a>
-            </div>
           </div>
-        </section>
-
-        <section className="kb-shell kb-spotlight" aria-label="Client story">
-          <p className="kb-key-row">
-            Say goodbye to
-            <span className="kb-key">Realtor</span>
-            <span className="kb-key">Lawyer</span>
-          </p>
-          <blockquote className="kb-spotlight-quote">
-            “Katie probably saved us a second retainer. Maybe more.”
-          </blockquote>
-          <div className="kb-person">
+          <div className="min-h-[320px] md:min-h-[520px]">
             <img
-              className="kb-avatar"
-              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=96&h=96&q=80"
-              alt=""
+              src={STUDIO}
+              alt="Katie Bayliss"
+              className="h-full w-full object-cover object-top"
             />
-            <p>
-              <strong>James Hale</strong>
-              <span>Investor, Orange County</span>
-            </p>
           </div>
-          <div>
-            <a className="kb-btn kb-btn-white" href="#stories">
-              Read a client story
-            </a>
-          </div>
-        </section>
+        </article>
+      </section>
 
-        <section className="kb-section kb-shell" id="practice">
-          <div className="kb-practice">
-            <div className="kb-acc-list">
-              {PRACTICES.map((practice, index) => {
-                const active = index === practiceIndex;
-                return (
-                  <button
-                    key={practice.title}
-                    type="button"
-                    className={`kb-acc-item${active ? ' is-active' : ''}`}
-                    onClick={() => setPracticeIndex(index)}
-                    aria-expanded={active}
-                  >
-                    <h3>{practice.title}</h3>
-                    <p>{practice.body}</p>
-                  </button>
-                );
-              })}
-            </div>
-            <div className="kb-practice-stage">
-              <img
-                key={activePractice.title}
-                src={activePractice.image}
-                alt=""
-              />
-              <div className="kb-doc-pills">
-                <span className="kb-pill kb-pill-light">{activePractice.badge}</span>
-                <span className="kb-pill">{activePractice.count}</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="kb-section kb-shell">
-          <div className="kb-expect">
-            <div>
-              <h2 className="kb-display kb-split-title">
-                What to expect in your first conversation.
-              </h2>
-              <a className="kb-btn kb-btn-coral" href="#contact" style={{ marginTop: 32 }}>
-                Book a Consultation
-              </a>
-              <div className="kb-person" style={{ marginTop: 28 }}>
-                <img className="kb-avatar" src={HEADSHOT} alt="" />
-                <p>
-                  <strong>Katie Bayliss, Esq.</strong>
-                  <span>Attorney &amp; Realtor · Irvine</span>
-                </p>
-              </div>
-            </div>
-            <div className="kb-steps">
-              {STEPS.map((step) => (
-                <article key={step.num} className="kb-step">
-                  <span className="kb-step-num">{step.num}</span>
-                  <h3>{step.title}</h3>
-                  <p>{step.body}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="kb-section kb-shell" id="stories" aria-label="Client remarks">
-          <p className="kb-trust-caption" style={{ textAlign: 'left', marginBottom: 28 }}>
-            Clients across Orange County
+      <section id="about" className="bg-black px-4 py-16 md:px-6 md:py-24">
+        <div className="mx-auto max-w-6xl rounded-[2rem] bg-[#101010] px-6 py-16 text-center sm:px-10 md:py-24">
+          <p className="mb-6 text-[10px] font-medium sm:text-xs" style={{ color: CREAM }}>
+            Law & real estate
           </p>
-          <div className="kb-quotes">
-            {QUOTES.map((quote) => (
-              <article key={quote.name} className="kb-quote-lite">
-                <p>“{quote.text}”</p>
-                <footer>
-                  <strong>{quote.name}</strong>
-                  {quote.role}
-                </footer>
+          <WordsPullUpMultiStyle
+            className="mx-auto max-w-3xl text-3xl leading-[0.95] sm:text-4xl sm:leading-[0.9] md:text-5xl lg:text-6xl xl:text-7xl"
+            style={{ color: INK }}
+            segments={[
+              { text: 'I am Katie Bayliss,', className: 'font-normal' },
+              {
+                text: 'a California attorney and realtor.',
+                className: 'kb-serif italic',
+              },
+              {
+                text: 'I have skills in closings, probate, and counsel that stays through signature.',
+                className: 'font-normal',
+              },
+            ]}
+          />
+          <AboutBody text={ABOUT_COPY} />
+        </div>
+      </section>
+
+      <section className="bg-black px-4 pb-10 md:px-6">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-2 md:grid-cols-3">
+          {TRIO.map((item) => (
+            <article
+              key={item.title}
+              className="rounded-[1.5rem] bg-[#212121] p-6 md:p-8"
+            >
+              <h3 className="text-xl font-medium md:text-2xl" style={{ color: INK }}>
+                {item.title}
+              </h3>
+              <p className="mt-3 text-sm leading-5 text-gray-400">{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section
+        id="practice"
+        className="relative overflow-hidden bg-black px-4 py-16 md:px-6 md:py-24"
+      >
+        <div className="bg-noise pointer-events-none absolute inset-0 opacity-[0.15]" />
+        <div className="relative mx-auto max-w-6xl">
+          <div className="mb-10 text-center md:mb-14">
+            <WordsPullUpMultiStyle
+              className="text-xl font-normal sm:text-2xl md:text-3xl lg:text-4xl"
+              style={{ color: INK }}
+              segments={[
+                {
+                  text: 'Counsel for Orange County closings.',
+                  className: 'font-normal',
+                },
+              ]}
+            />
+            <div className="mt-2">
+              <WordsPullUpMultiStyle
+                className="text-xl font-normal text-gray-500 sm:text-2xl md:text-3xl lg:text-4xl"
+                segments={[
+                  {
+                    text: 'Built for the same table. Powered by both licenses.',
+                    className: 'font-normal text-gray-500',
+                  },
+                ]}
+              />
+            </div>
+          </div>
+
+          <div
+            ref={featuresRef}
+            className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4 lg:h-[480px]"
+          >
+            <motion.article
+              className="relative min-h-[320px] overflow-hidden rounded-2xl lg:min-h-0"
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={featuresInView ? { scale: 1, opacity: 1 } : undefined}
+              transition={{ delay: 0, duration: 0.7, ease: CARD_EASE }}
+            >
+              <img
+                src={PORTRAIT}
+                alt="Katie Bayliss"
+                className="absolute inset-0 h-full w-full object-cover object-top"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent" />
+              <p
+                className="absolute bottom-5 left-5 text-lg font-medium md:text-xl"
+                style={{ color: INK }}
+              >
+                One person at the table.
+              </p>
+            </motion.article>
+
+            {FEATURE_CARDS.map((card, i) => (
+              <motion.article
+                key={card.num}
+                className="flex min-h-[280px] flex-col justify-between rounded-2xl bg-[#212121] p-5 lg:min-h-0"
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={featuresInView ? { scale: 1, opacity: 1 } : undefined}
+                transition={{
+                  delay: (i + 1) * 0.15,
+                  duration: 0.7,
+                  ease: CARD_EASE,
+                }}
+              >
+                <div>
+                  <h3
+                    className="text-xl font-medium leading-tight md:text-2xl"
+                    style={{ color: INK }}
+                  >
+                    {card.title}{' '}
+                    <span className="text-gray-500">{card.num}</span>
+                  </h3>
+                  <ul className="mt-5 space-y-2.5">
+                    {card.items.map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-start gap-2 text-sm text-gray-400"
+                      >
+                        <Check
+                          size={16}
+                          className="mt-0.5 shrink-0"
+                          style={{ color: CREAM }}
+                        />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <a
+                  href="#contact"
+                  className="mt-6 inline-flex items-center gap-2 text-sm"
+                  style={{ color: CREAM }}
+                >
+                  Learn more
+                  <ArrowRight size={14} className="-rotate-45" />
+                </a>
+              </motion.article>
+            ))}
+          </div>
+
+          <div className="mt-8 grid grid-cols-1 gap-2 md:grid-cols-5">
+            {PRACTICES.map((practice) => (
+              <article
+                key={practice.title}
+                className="rounded-2xl bg-[#101010] p-5"
+              >
+                <h3 className="text-base font-medium" style={{ color: INK }}>
+                  {practice.title}
+                </h3>
+                <p className="mt-2 text-xs leading-5 text-gray-400">
+                  {practice.body}
+                </p>
               </article>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="kb-section kb-shell">
-          <div className="kb-pair">
-            <article className="kb-stat-card">
-              <h3>Admitted to the California Bar since 2010 — still on the first call.</h3>
-              <p>
-                Fifteen years of practice in real estate, probate, business,
-                injury, and criminal law. Broker work through All In Realty.
-                One person who can finish the sentence.
-              </p>
-            </article>
-            <article className="kb-photo-card">
-              <img src={PORTRAIT} alt="Katie Bayliss professional portrait" />
-            </article>
+      <section id="steps" className="bg-black px-4 py-16 md:px-6 md:py-24">
+        <div className="mx-auto max-w-6xl">
+          <p className="text-xs font-medium tracking-[0.16em] uppercase" style={{ color: CREAM }}>
+            What to expect
+          </p>
+          <h2 className="mt-3 text-3xl font-medium md:text-5xl" style={{ color: INK }}>
+            Three steps. One counsel.
+          </h2>
+          <div className="mt-10 grid grid-cols-1 gap-2 md:grid-cols-3">
+            {STEPS.map((step) => (
+              <article key={step.num} className="rounded-[1.5rem] bg-[#212121] p-6 md:p-8">
+                <p className="text-xs text-gray-500">{step.num}</p>
+                <h3 className="mt-4 text-xl font-medium md:text-2xl" style={{ color: INK }}>
+                  {step.title}
+                </h3>
+                <p className="mt-3 text-sm leading-5 text-gray-400">{step.body}</p>
+              </article>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="kb-section kb-shell">
-          <div className="kb-feature-grid">
-            <article className="kb-card">
-              <div className="kb-icon-row">
-                <span className="kb-icon-pill" aria-hidden>
-                  <FileText size={18} strokeWidth={1.6} />
-                </span>
-                <span className="kb-icon-pill" aria-hidden>
-                  <Landmark size={18} strokeWidth={1.6} />
-                </span>
-                <span className="kb-icon-pill" aria-hidden>
-                  <Scale size={18} strokeWidth={1.6} />
-                </span>
-                <span className="kb-icon-pill" aria-hidden>
-                  <Shield size={18} strokeWidth={1.6} />
-                </span>
+      <section className="bg-black px-4 pb-10 md:px-6">
+        <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#101010] md:grid-cols-2">
+          <div className="min-h-[360px]">
+            <img
+              src={HERO_PHOTO}
+              alt="Katie Bayliss outdoors"
+              className="h-full w-full object-cover object-top"
+            />
+          </div>
+          <div className="flex flex-col justify-between p-8 md:p-12">
+            <p className="text-xs font-medium tracking-[0.16em] uppercase" style={{ color: CREAM }}>
+              Orange County
+            </p>
+            <blockquote
+              className="kb-serif mt-8 text-3xl leading-[1.05] italic md:text-4xl"
+              style={{ color: INK }}
+            >
+              “Katie probably saved us a second retainer. Maybe more.”
+            </blockquote>
+            <p className="mt-8 text-sm text-gray-400">Irvine family · Probate sale</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-black px-4 py-16 md:px-6">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-2 md:grid-cols-3">
+          {QUOTES.map((quote) => (
+            <article key={quote.name} className="rounded-[1.5rem] bg-[#212121] p-6 md:p-8">
+              <div className="mb-5 h-10 w-10 overflow-hidden rounded-full">
+                <img src={HEADSHOT} alt="" className="h-full w-full object-cover" />
               </div>
-              <h3>Works with the process you already know</h3>
-              <p>
-                Listings, escrow, title, and court filings stay in the systems
-                your transaction already uses. Katie adds counsel without adding
-                another platform to learn.
+              <p className="text-sm leading-6" style={{ color: INK }}>
+                “{quote.text}”
               </p>
-            </article>
-
-            <article className="kb-card">
-              <div className="kb-preview-wrap" aria-hidden>
-                <div className="kb-doc">
-                  <p className="kb-doc-kicker">California Residential Purchase Agreement</p>
-                  <p>
-                    Buyer shall deposit earnest money within{' '}
-                    <span className="kb-mark">three (3) business days</span> of
-                    acceptance. Inspection contingency expires on{' '}
-                    <span className="kb-mark">Day 17</span>.
-                  </p>
-                  <p>
-                    Seller to provide disclosures including{' '}
-                    <span className="kb-mark">TDS, SPQ, and NHD</span> prior to
-                    close of escrow.
-                  </p>
-                  <div className="kb-doc-pills">
-                    <span className="kb-pill kb-pill-light">Review contract</span>
-                    <span className="kb-pill kb-pill-cyan">4 notes</span>
-                  </div>
-                </div>
-              </div>
-              <h3>Counsel trained on the transaction, not a template</h3>
-              <p>
-                Contract language, contingencies, and probate constraints get
-                read in context — so you are not paying outside counsel to
-                re-explain a deal Katie is already running.
+              <p className="mt-6 text-xs font-medium" style={{ color: CREAM }}>
+                {quote.name}
               </p>
+              <p className="text-xs text-gray-500">{quote.role}</p>
             </article>
-          </div>
-        </section>
+          ))}
+        </div>
+      </section>
 
-        <section className="kb-section kb-shell" id="faq">
-          <div className="kb-faq-head">
-            <h2 className="kb-display">Frequently asked questions</h2>
-          </div>
-          <div className="kb-faq-list">
-            {FAQS.map((faq, index) => {
-              const open = faqIndex === index;
+      <section id="faq" className="bg-black px-4 py-16 md:px-6 md:py-24">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="text-3xl font-medium md:text-5xl" style={{ color: INK }}>
+            Questions
+          </h2>
+          <div className="mt-10 divide-y divide-white/10 border-y border-white/10">
+            {FAQS.map((item, i) => {
+              const open = faqIndex === i;
               return (
                 <button
-                  key={faq.q}
+                  key={item.q}
                   type="button"
-                  className={`kb-faq-item${open ? ' is-open' : ''}`}
-                  onClick={() => setFaqIndex(open ? null : index)}
-                  aria-expanded={open}
+                  className="w-full py-5 text-left"
+                  onClick={() => setFaqIndex(open ? null : i)}
                 >
-                  <span className="kb-faq-q">
-                    {faq.q}
-                    <span className="kb-faq-plus" aria-hidden>
-                      {open ? '−' : '+'}
+                  <span className="flex items-start justify-between gap-4">
+                    <span className="text-base font-medium md:text-lg" style={{ color: INK }}>
+                      {item.q}
                     </span>
+                    <span className="text-gray-500">{open ? '–' : '+'}</span>
                   </span>
-                  <span className="kb-faq-a">{faq.a}</span>
+                  {open ? (
+                    <span className="mt-3 block text-sm leading-6 text-gray-400">
+                      {item.a}
+                    </span>
+                  ) : null}
                 </button>
               );
             })}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="kb-close kb-shell" id="contact">
-          <div className="kb-close-card">
-            <h2 className="kb-display">Book a consultation</h2>
-            <p className="kb-close-sub">
-              Families and investors across Orange County — one conversation
-              with Katie.
+      <section id="contact" className="bg-black px-4 pb-20 md:px-6">
+        <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-[#101010] md:grid-cols-2">
+          <div className="p-8 md:p-12">
+            <p className="text-xs font-medium tracking-[0.16em] uppercase" style={{ color: CREAM }}>
+              New clients welcome
             </p>
-            {closeSent ? (
-              <div className="kb-form-success">
-                <h3>Received.</h3>
-                <p>Katie will be in touch. Call {PHONE} if it is time-sensitive.</p>
-              </div>
+            <h2 className="mt-4 text-3xl font-medium md:text-5xl" style={{ color: INK }}>
+              Book a consultation
+            </h2>
+            <p className="mt-4 text-sm leading-6 text-gray-400">
+              Call {PHONE} or send a note. Katie will follow up from Bayliss Law
+              in Irvine.
+            </p>
+            <p className="mt-6 text-sm" style={{ color: CREAM }}>
+              {ADDRESS}
+            </p>
+            <div className="mt-6 flex flex-wrap gap-4 text-sm text-gray-400">
+              <a href={INSTAGRAM} target="_blank" rel="noreferrer">
+                @katiebattorney
+              </a>
+              <a href={REAL_ESTATE_IG} target="_blank" rel="noreferrer">
+                @katiebsellscali
+              </a>
+              <a href={BESTIE_IG} target="_blank" rel="noreferrer">
+                @katieb_yourrealbestie
+              </a>
+            </div>
+          </div>
+          <div className="p-8 md:p-12">
+            {sent ? (
+              <p className="text-2xl font-medium" style={{ color: INK }}>
+                We’ll call you back.
+              </p>
             ) : (
-              <form
-                className="kb-trial-form"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  setCloseSent(true);
-                }}
-              >
-                <div className="kb-field">
-                  <label htmlFor="close-email">Email*</label>
-                  <input
-                    id="close-email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    placeholder="e.g. you@email.com"
-                    value={closeForm.email}
-                    onChange={(event) =>
-                      setCloseForm((form) => ({
-                        ...form,
-                        email: event.target.value,
-                      }))
-                    }
-                    required
-                  />
-                </div>
-                <div className="kb-field">
-                  <label htmlFor="close-matter">How can we help?*</label>
-                  <select
-                    id="close-matter"
-                    name="matter"
-                    value={closeForm.matter}
-                    onChange={(event) =>
-                      setCloseForm((form) => ({
-                        ...form,
-                        matter: event.target.value,
-                      }))
-                    }
-                    required
-                  >
-                    {MATTERS.map((matter) => (
-                      <option key={matter} value={matter}>
-                        {matter}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="kb-field kb-span-2">
-                  <label htmlFor="close-name">Name*</label>
-                  <input
-                    id="close-name"
-                    name="name"
-                    autoComplete="name"
-                    placeholder="Your name"
-                    value={closeForm.name}
-                    onChange={(event) =>
-                      setCloseForm((form) => ({
-                        ...form,
-                        name: event.target.value,
-                      }))
-                    }
-                    required
-                  />
-                </div>
-                <div className="kb-span-2 kb-trial-actions">
-                  <button type="submit" className="kb-btn kb-btn-solid">
-                    Book a Consultation
-                  </button>
-                  <p className="kb-required">*Required</p>
-                </div>
+              <form className="flex flex-col gap-3" onSubmit={onSubmit}>
+                <input className="kb-input" name="name" required placeholder="Full name" />
+                <input
+                  className="kb-input"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="Email"
+                />
+                <input className="kb-input" name="phone" type="tel" placeholder="Phone" />
+                <select className="kb-input" name="matter" defaultValue={MATTERS[0]}>
+                  {MATTERS.map((matter) => (
+                    <option key={matter}>{matter}</option>
+                  ))}
+                </select>
+                <textarea
+                  className="kb-input min-h-[120px] rounded-3xl"
+                  name="notes"
+                  placeholder="What’s going on?"
+                />
+                <button
+                  type="submit"
+                  className="mt-2 inline-flex items-center justify-center gap-2 rounded-full py-4 text-sm font-medium text-black"
+                  style={{ backgroundColor: CREAM }}
+                >
+                  Send inquiry
+                  <ArrowRight size={16} />
+                </button>
               </form>
             )}
           </div>
-        </section>
-
-        <footer className="kb-shell kb-footer">
-          <span>© {new Date().getFullYear()} Bayliss Law</span>
-          <div className="kb-footer-links">
-            <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
-              @katiebattorney
-            </a>
-            <a href={REAL_ESTATE_IG} target="_blank" rel="noreferrer">
-              @katiebsellscali
-            </a>
-            <a href={PHONE_HREF}>{PHONE}</a>
-            <span>{ADDRESS}</span>
-            <a href="https://www.instagram.com/katieb_yourrealbestie/" target="_blank" rel="noreferrer">
-              @katieb_yourrealbestie
-            </a>
-          </div>
-        </footer>
-      </div>
+        </div>
+      </section>
     </div>
   );
 }
